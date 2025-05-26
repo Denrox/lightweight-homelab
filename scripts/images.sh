@@ -41,6 +41,7 @@ do
         echo "pushed $desttagname"
         
         docker rmi $tagname $desttagname &> /dev/null
+        sleep 10
       done
       ((tag_count++))
     fi

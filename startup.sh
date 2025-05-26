@@ -12,6 +12,21 @@ check_port() {
     fi
 }
 
+check_command() {
+    if ! command -v "$1" &> /dev/null; then
+        echo "Error: $1 must be installed"
+        exit 1
+    fi
+}
+
+check_command docker
+check_command netstat
+
+if ! docker compose version &> /dev/null; then
+    echo "Error: docker compose must be installed"
+    exit 1
+fi
+
 ARCH=$(uname -m)
 case ${ARCH} in
     x86_64)
