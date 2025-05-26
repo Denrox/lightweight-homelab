@@ -1,0 +1,17 @@
+services:
+  nginx:
+    image: nginx:1.28.0-perl
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./conf/sites.conf:/etc/nginx/conf.d/sites.conf:ro
+      - ../../data/files:/var/www/files:ro
+      - ../../data/packages:/var/www/apt-mirror:ro
+    restart: unless-stopped
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    external: true

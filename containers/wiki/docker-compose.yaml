@@ -1,0 +1,13 @@
+services:
+  wikipedia:
+    image: wiki:latest
+    container_name: wikipedia
+    volumes:
+      - ../../data/wiki/zim:/kiwix-data:ro
+    restart: unless-stopped
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    external: true

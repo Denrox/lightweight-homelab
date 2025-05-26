@@ -1,0 +1,14 @@
+nginx
+node
+ubuntu
+debian
+alpine
+mysql
+registry
+postgres
+php
+redis
+memcached
+mongo
+rabbitmq
+traefik

@@ -1,0 +1,16 @@
+services:
+  registry:
+    image: registry:3.0.0
+    container_name: registry
+    volumes:
+      - ../../data/registry:/var/lib/registry
+      - ./config.yaml:/etc/docker/registry/config.yml:ro
+    environment:
+      - REGISTRY_STORAGE_DELETE_ENABLED=false
+    restart: unless-stopped
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    external: true
