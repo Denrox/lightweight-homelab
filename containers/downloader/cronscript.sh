@@ -16,6 +16,22 @@ if ! ping -c 1 google.com &> /dev/null && ! ping -c 1 cloudflare.com &> /dev/nul
     exit 0
 fi
 
+download_if_not_exists() {
+    local target_dir="$1"
+    local url="$2"
+    local filename=$(basename "$url")
+    local full_path="$target_dir/$filename"
+
+    if [ ! -f "$full_path" ]; then
+        wget -P "$target_dir" "$url"
+    fi
+}
+
+download_if_not_exists "../data/volumes/downloader/data/files/os/ubuntu-releases" "https://releases.ubuntu.com/24.04/ubuntu-24.04.2-desktop-amd64.iso"
+download_if_not_exists "../data/volumes/downloader/data/files/os/ubuntu-releases" "https://releases.ubuntu.com/24.04/ubuntu-24.04.2-live-server-amd64.iso"
+download_if_not_exists "../data/volumes/downloader/data/files/os/debian-releases" "https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-12.11.0-amd64-netinst.iso"
+download_if_not_exists "../data/volumes/downloader/data/files/os/proxmox-releases" "https://enterprise.proxmox.com/iso/proxmox-ve_8.4-1.iso"
+
 cd /usr/local/bin/scripts;
 
 ./downloader.sh --source "https://download.kiwix.org/zim/stack_exchange/" --dest "../../data/wiki/zim" --pattern "(mathematica\.stackexchange\.com_en_all)" --latest;
