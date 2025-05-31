@@ -41,16 +41,15 @@ case ${ARCH} in
         ;;
 esac
 
-USAGE="Usage: $0 --ip <ip_address> [--os] [--reg] [--dns] [--dnsport <port>]"
+USAGE="Usage: $0 --ip <ip_address> [--reg] [--dns] [--dnsport <port>]"
 if [ $# -lt 1 ]; then
     echo "Error: Parameters must be provided"
     echo "$USAGE"
-    echo "Example: $0 --ip 192.168.1.10 --os --reg --dns --dnsport 53"
+    echo "Example: $0 --ip 192.168.1.10 --reg --dns --dnsport 53"
     exit 1
 fi
 
 FINAL_IP=""
-DOWNLOAD_OS=false
 DOWNLOAD_REG=false
 STARTUP_DNS=false
 DNS_PORT="53"
@@ -60,10 +59,6 @@ while [[ $# -gt 0 ]]; do
         --ip)
             FINAL_IP="$2"
             shift 2
-            ;;
-        --os)
-            DOWNLOAD_OS=true
-            shift
             ;;
         --reg)
             DOWNLOAD_REG=true
@@ -182,11 +177,6 @@ if [ "$DOWNLOAD_REG" = true ]; then
     echo "Downloading docker images..."
     ./images.sh reg.root:5000
     sed -i '/127\.0\.0\.1 reg\.root/d' /etc/hosts
-fi
-
-if [ "$DOWNLOAD_OS" = true ]; then
-    echo "Downloading os images..."
-    ./os.sh
 fi
 
 echo "Startup completed successfully"
