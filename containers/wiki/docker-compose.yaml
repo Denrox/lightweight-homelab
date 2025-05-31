@@ -3,7 +3,7 @@ services:
     image: wiki:latest
     container_name: wikipedia
     volumes:
-      - ../../data/wiki/zim:/kiwix-data:ro
+      - ../../data/volumes/downloader/data/wiki:/kiwix-data:ro
     restart: unless-stopped
     networks:
       - frontend

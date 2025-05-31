@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ../../data:/usr/local/data
-      - ./logs:/logs
-      - ./mirror-rsync.d:/usr/local/bin/scripts/mirror-rsync.d
+      - ../../data/volumes/downloader/data:/usr/local/data
+      - ../../data/volumes/downloader/logs:/logs
+      - ../../data/volumes/downloader/mirror-rsync.d:/usr/local/bin/scripts/mirror-rsync.d
     restart: unless-stopped
