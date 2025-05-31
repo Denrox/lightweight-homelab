@@ -1,4 +1,4 @@
-# Dooms Day Hard Drive
+# Lightweight Homelab
 
 ## Overview
 This project creates for you a portable set of services which will allow you to run many things without internet. It provides you with a local mirror for ubuntu apt repositories, a local registry for docker images, a local wiki (kiwix) and a local dns resolver. It also downloads for you installation images for several linux distributions. It also keeps you local apt-mirror and kiwix library up to date.
