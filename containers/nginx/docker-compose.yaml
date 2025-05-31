@@ -5,9 +5,9 @@ services:
     ports:
       - "80:80"
     volumes:
-      - .../../data/volumes/nginx/conf/sites.conf:/etc/nginx/conf.d/sites.conf:ro
-      - ../../data/volumes/downloader/files:/var/www/files:ro
-      - ../../data/volumes/downloader/packages:/var/www/apt-mirror:ro
+      - ../../data/volumes/nginx/conf/sites.conf:/etc/nginx/conf.d/sites.conf:ro
+      - ../../data/volumes/downloader/data/files:/var/www/files:ro
+      - ../../data/volumes/downloader/data/packages:/var/www/apt-mirror:ro
     restart: unless-stopped
     networks:
       - frontend
