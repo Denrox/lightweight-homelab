@@ -27,10 +27,10 @@ download_if_not_exists() {
     fi
 }
 
-download_if_not_exists "../data/volumes/downloader/data/files/os/ubuntu-releases" "https://releases.ubuntu.com/24.04/ubuntu-24.04.2-desktop-amd64.iso"
-download_if_not_exists "../data/volumes/downloader/data/files/os/ubuntu-releases" "https://releases.ubuntu.com/24.04/ubuntu-24.04.2-live-server-amd64.iso"
-download_if_not_exists "../data/volumes/downloader/data/files/os/debian-releases" "https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-12.11.0-amd64-netinst.iso"
-download_if_not_exists "../data/volumes/downloader/data/files/os/proxmox-releases" "https://enterprise.proxmox.com/iso/proxmox-ve_8.4-1.iso"
+download_if_not_exists "../../data/files/os/ubuntu-releases" "https://releases.ubuntu.com/24.04/ubuntu-24.04.2-desktop-amd64.iso"
+download_if_not_exists "../../data/files/os/ubuntu-releases" "https://releases.ubuntu.com/24.04/ubuntu-24.04.2-live-server-amd64.iso"
+download_if_not_exists "../../data/files/os/debian-releases" "https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-12.11.0-amd64-netinst.iso"
+download_if_not_exists "../../data/files/os/proxmox-releases" "https://enterprise.proxmox.com/iso/proxmox-ve_8.4-1.iso"
 
 cd /usr/local/bin/scripts;
 
