@@ -33,6 +33,14 @@ echo "Pulling nginx:1.28.0-perl for arm64..."
 docker pull --platform linux/arm64 nginx:1.28.0-perl
 docker save nginx:1.28.0-perl > images/nginx-1.28.0-perl-arm64.tar
 
+echo "Pulling gogs:0.13 for amd64..."
+docker pull --platform linux/amd64 gogs:0.13-amd64
+docker save gogs:0.13-amd64 > images/gogs-0.13-amd64.tar
+
+echo "Pulling gogs:0.13 for arm64..."
+docker pull --platform linux/arm64 gogs:0.13-arm64
+docker save gogs:0.13-arm64 > images/gogs-0.13-arm64.tar
+
 echo "Pulling coredns/coredns:1.12.1 for arm64..."
 docker pull --platform linux/arm64 coredns/coredns:1.12.1
 docker save coredns/coredns:1.12.1 > images/coredns-1.12.1-arm64.tar

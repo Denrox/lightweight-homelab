@@ -141,6 +141,15 @@ else
     exit 1;
 fi
 
+GOGS_IMAGE="images/gogs-0.13-${ARCH_TAG}.tar";
+if [ -f "${GOGS_IMAGE}" ]; then
+    echo "Loading gogs image from ${GOGS_IMAGE}...";
+    docker load --input "${GOGS_IMAGE}";
+else
+    echo "Error: gogs image file not found at ${GOGS_IMAGE}";
+    exit 1;
+fi
+
 cd containers/downloader || exit;
 
 if [ "$(docker ps -q -f name=downloader)" ]; then
@@ -156,6 +165,10 @@ docker compose up -d;
 
 cd ../registry || exit;
 echo "Starting registry service...";
+docker compose up -d;
+
+cd ../gogs || exit;
+echo "Starting gogs service...";
 docker compose up -d;
 
 cd ../nginx || exit;

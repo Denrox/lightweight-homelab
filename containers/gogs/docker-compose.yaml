@@ -1,0 +1,14 @@
+services:
+  gogs:
+    image: gogs:0.13
+    environment:
+      - GOGS_CUSTOM_PATH=/data/gogs
+    volumes:
+      - ../../data/volumes/gogs/gogs:/data/gogs
+    restart: unless-stopped
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    external: true
