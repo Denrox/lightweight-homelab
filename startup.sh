@@ -145,6 +145,7 @@ GOGS_IMAGE="images/gogs-0.13-${ARCH_TAG}.tar";
 if [ -f "${GOGS_IMAGE}" ]; then
     echo "Loading gogs image from ${GOGS_IMAGE}...";
     docker load --input "${GOGS_IMAGE}";
+    docker tag gogs:0.13-${ARCH_TAG} gogs:0.13;
 else
     echo "Error: gogs image file not found at ${GOGS_IMAGE}";
     exit 1;
