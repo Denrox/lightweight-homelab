@@ -42,11 +42,11 @@ case ${ARCH} in
 esac
 
 USAGE="Usage: $0 --ip <ip_address> [--reg] [--dns] [--dnsport <port>]"
-if [ $# -lt 1 ]; then
-    echo "Error: Parameters must be provided"
+if [ $# -eq 0 ]; then
+    echo "Starting with default configuration"
+    echo "For additional options:"
     echo "$USAGE"
     echo "Example: $0 --ip 192.168.1.10 --reg --dns --dnsport 53"
-    exit 1
 fi
 
 FINAL_IP=""
