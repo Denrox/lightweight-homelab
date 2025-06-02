@@ -2,11 +2,12 @@
     log
     errors
     hosts {
-        192.168.0.69 files.root
-        192.168.0.69 wiki.root
-        192.168.0.69 mirror.root
-        192.168.0.69 reg.root
-        192.168.0.69 main.root
+        192.168.0.1 files.root
+        192.168.0.1 wiki.root
+        192.168.0.1 mirror.root
+        192.168.0.1 reg.root
+        192.168.0.1 main.root
+        192.168.0.1 git.root
         fallthrough
     }
     forward . 8.8.8.8

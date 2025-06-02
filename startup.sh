@@ -177,7 +177,7 @@ docker compose up -d;
 
 if [ "$STARTUP_DNS" = true ]; then
     cd ../coredns || exit;
-    sed -i "s/192\.168\.0\.1/${FINAL_IP}/g" config/Corefile
+    sed -i "s/192\.168\.0\.1/${FINAL_IP}/g" ../../data/volumes/coredns/config/Corefile
     sed -i "s/53\:53\/udp/${DNS_PORT}\:${DNS_PORT}\/udp/g" docker-compose.yaml
     echo "Starting coredns service...";
     docker compose up -d;

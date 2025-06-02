@@ -1,6 +1,7 @@
 services:
   gogs:
     image: gogs:0.13
+    hostname: gogs
     environment:
       - GOGS_CUSTOM_PATH=/data/gogs
     volumes:
