@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library version="20110515">
+    <book id="waiting">
+        <title>Waiting for Content</title>
+        <description>Please wait while content is being downloaded</description>
+        <language>eng</language>
+        <creator>System</creator>
+        <date>2024</date>
+        <url>http://localhost:8080/waiting.html</url>
+    </book>
+</library>
