@@ -22,4 +22,4 @@ done
 
 echo "Starting kiwix-serve..."
 
-exec ./kiwix-serve --verbose --port 8080 $ZIM_FILES
+exec ./kiwix-serve --verbose --port 8080 --library /kiwix/tools/library.xml $ZIM_FILES
