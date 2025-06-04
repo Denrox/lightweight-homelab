@@ -6,5 +6,6 @@ services:
     volumes:
       - ../../data/volumes/downloader/data:/usr/local/data
       - ../../data/volumes/downloader/logs:/logs
+      - ../../data/volumes/downloader/config:/config:ro
       - ../../data/volumes/downloader/mirror-rsync.d:/usr/local/bin/scripts/mirror-rsync.d
     restart: unless-stopped

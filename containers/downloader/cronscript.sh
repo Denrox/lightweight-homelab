@@ -27,27 +27,30 @@ download_if_not_exists() {
     fi
 }
 
-cd /usr/local/bin/scripts;
+cd /usr/local/bin/scripts
 
-download_if_not_exists "../../data/files/os/ubuntu-releases" "https://releases.ubuntu.com/24.04/ubuntu-24.04.2-desktop-amd64.iso"
-download_if_not_exists "../../data/files/os/ubuntu-releases" "https://releases.ubuntu.com/24.04/ubuntu-24.04.2-live-server-amd64.iso"
-download_if_not_exists "../../data/files/os/debian-releases" "https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-12.11.0-amd64-netinst.iso"
-download_if_not_exists "../../data/files/os/proxmox-releases" "https://enterprise.proxmox.com/iso/proxmox-ve_8.4-1.iso"
+CONFIG_FILE="/config/downloads.json"
+if [ ! -f "$CONFIG_FILE" ]; then
+    echo "Error: Config file not found at $CONFIG_FILE"
+    exit 1
+fi
 
-./downloader.sh --source "https://download.kiwix.org/zim/stack_exchange/" --dest "../../data/wiki/zim" --pattern "(mathematica\.stackexchange\.com_en_all)" --latest;
-sleep 10;
-./downloader.sh --source "https://download.kiwix.org/zim/stack_exchange/" --dest "../../data/wiki/zim" --pattern "(askubuntu\.com_en_all)" --latest;
-sleep 10;
-./downloader.sh --source "https://download.kiwix.org/zim/stack_exchange/" --dest "../../data/wiki/zim" --pattern "(devops\.stackexchange\.com_en_all)" --latest;
-sleep 10;
-./downloader.sh --source "https://download.kiwix.org/zim/other/" --dest "../../data/wiki/zim" --pattern "(zimgit-medicine_en_)" --latest;
-sleep 10;
-./downloader.sh --source "https://download.kiwix.org/zim/stack_exchange/" --dest "../../data/wiki/zim" --pattern "(stackoverflow\.com_en_all)" --latest;
-sleep 10;
-./downloader.sh --source "https://download.docker.com/linux/debian" --dest "../../data/files/download.docker.com" --pattern "(bookworm\/.+\/stable)";
-sleep 10;
-./downloader.sh --source "https://download.docker.com/linux/ubuntu" --dest "../../data/files/download.docker.com" --pattern "(noble\/.+\/stable)";
-sleep 10;
-./mirror-rsync.sh;
+# Process all downloads
+echo "Processing downloads..."
+jq -r '.downloads[] | select(.type == "direct") | "\(.url)|\(.dest)"' "$CONFIG_FILE" | while IFS='|' read -r url dest; do
+    download_if_not_exists "$dest" "$url"
+done
+
+jq -r '.downloads[] | select(.type == "pattern") | "\(.url)|\(.dest)|\(.pattern)|\(.latest)"' "$CONFIG_FILE" | while IFS='|' read -r url dest pattern latest; do
+    latest_flag=""
+    if [ "$latest" = "true" ]; then
+        latest_flag="--latest"
+    fi
+    ./downloader.sh --source "$url" --dest "$dest" --pattern "$pattern" $latest_flag
+    sleep 10
+done
+
+# Run mirror-rsync at the end
+./mirror-rsync.sh
 
 echo "=== Download completed at $(date) ==="

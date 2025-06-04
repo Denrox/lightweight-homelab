@@ -1,0 +1,73 @@
+{
+  "downloads": [
+    {
+      "url": "https://releases.ubuntu.com/24.04/ubuntu-24.04.2-desktop-amd64.iso",
+      "dest": "../../data/files/os/ubuntu-releases",
+      "type": "direct"
+    },
+    {
+      "url": "https://releases.ubuntu.com/24.04/ubuntu-24.04.2-live-server-amd64.iso",
+      "dest": "../../data/files/os/ubuntu-releases",
+      "type": "direct"
+    },
+    {
+      "url": "https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-12.11.0-amd64-netinst.iso",
+      "dest": "../../data/files/os/debian-releases",
+      "type": "direct"
+    },
+    {
+      "url": "https://enterprise.proxmox.com/iso/proxmox-ve_8.4-1.iso",
+      "dest": "../../data/files/os/proxmox-releases",
+      "type": "direct"
+    },
+    {
+      "url": "https://download.kiwix.org/zim/stack_exchange/",
+      "dest": "../../data/wiki/zim",
+      "pattern": "(mathematica\\.stackexchange\\.com_en_all)",
+      "type": "pattern",
+      "latest": true
+    },
+    {
+      "url": "https://download.kiwix.org/zim/stack_exchange/",
+      "dest": "../../data/wiki/zim",
+      "pattern": "(askubuntu\\.com_en_all)",
+      "type": "pattern",
+      "latest": true
+    },
+    {
+      "url": "https://download.kiwix.org/zim/stack_exchange/",
+      "dest": "../../data/wiki/zim",
+      "pattern": "(devops\\.stackexchange\\.com_en_all)",
+      "type": "pattern",
+      "latest": true
+    },
+    {
+      "url": "https://download.kiwix.org/zim/other/",
+      "dest": "../../data/wiki/zim",
+      "pattern": "(zimgit-medicine_en_)",
+      "type": "pattern",
+      "latest": true
+    },
+    {
+      "url": "https://download.kiwix.org/zim/stack_exchange/",
+      "dest": "../../data/wiki/zim",
+      "pattern": "(stackoverflow\\.com_en_all)",
+      "type": "pattern",
+      "latest": true
+    },
+    {
+      "url": "https://download.docker.com/linux/debian",
+      "dest": "../../data/files/download.docker.com",
+      "pattern": "(bookworm\\/.+\\/stable)",
+      "type": "pattern",
+      "latest": false
+    },
+    {
+      "url": "https://download.docker.com/linux/ubuntu",
+      "dest": "../../data/files/download.docker.com",
+      "pattern": "(noble\\/.+\\/stable)",
+      "type": "pattern",
+      "latest": false
+    }
+  ]
+} 
