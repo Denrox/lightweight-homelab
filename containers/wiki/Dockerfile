@@ -15,8 +15,6 @@ RUN ARCH_MAP=`if [ "$TARGETARCH" = "arm64" ]; then echo "aarch64"; else echo "x8
     && mv kiwix-tools_linux-${ARCH_MAP}-${KIWIX_VERSION}/* /kiwix/tools/ \
     && rm -rf kiwix-tools.tar.gz kiwix-tools_linux-${ARCH_MAP}-${KIWIX_VERSION}
 
-COPY library.xml /kiwix/tools/
-
 COPY entrypoint.sh /kiwix/tools/
 RUN chmod +x /kiwix/tools/entrypoint.sh
 
