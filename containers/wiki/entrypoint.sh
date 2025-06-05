@@ -5,19 +5,65 @@ if [ ! -d "/kiwix-data" ]; then
     exit 1
 fi
 
-ZIM_FILES=$(find /kiwix-data -name "*.zim" -type f | tr '\n' ' ')
-
-if [ -z "$ZIM_FILES" ]; then
-    echo "No .zim files found in /kiwix-data"
-fi
-
-for file in $ZIM_FILES; do
-    if [ ! -r "$file" ]; then
-        echo "Error: Cannot read ZIM file: $file"
+generate_library_xml() {
+    echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
+    echo "<library version=\"20110515\">"
+    
+    if [ -z "$1" ]; then
+        echo "    <book id=\"waiting\">"
+        echo "        <title>Waiting for Content</title>"
+        echo "        <description>Please wait while content is being downloaded</description>"
+        echo "        <language>eng</language>"
+        echo "        <creator>System</creator>"
+        echo "        <date>2025</date>"
+        echo "        <url>http://wiki.root</url>"
+        echo "    </book>"
+    else
+        for zimfile in $1; do
+            filename=$(basename "$zimfile")
+            id="${filename%.*}"
+            echo "Processing $filename..."
+            
+            ./kiwix-manage /tmp/temp.xml add "$zimfile"
+            
+            awk '/<book/{p=1}/book>/{print;p=0}p' /tmp/temp.xml >> /tmp/library.xml
+            rm -f /tmp/temp.xml
+        done
     fi
-    echo "Found readable ZIM file: $file"
-done
+    echo "</library>"
+}
+
+update_and_restart() {
+    echo "Checking for ZIM files..."
+    NEW_ZIM_FILES=$(find /kiwix-data -name "*.zim" -type f | tr '\n' ' ')
+    
+    echo "Generating new library.xml..."
+    generate_library_xml "$NEW_ZIM_FILES" > /tmp/library.xml.new
+    
+    if ! cmp -s /tmp/library.xml.new /tmp/library.xml; then
+        echo "Library content changed, updating..."
+        mv /tmp/library.xml.new /tmp/library.xml
+        
+        if [ -f /tmp/kiwix.pid ]; then
+            kill $(cat /tmp/kiwix.pid)
+            rm /tmp/kiwix.pid
+        fi
+        
+        ./kiwix-serve --verbose --port 8080 --library /tmp/library.xml & echo $! > /tmp/kiwix.pid
+    else
+        echo "No changes in library content"
+        rm /tmp/library.xml.new
+    fi
+}
+
+ZIM_FILES=$(find /kiwix-data -name "*.zim" -type f | tr '\n' ' ')
+echo "Generating initial library.xml..."
+generate_library_xml "$ZIM_FILES" > /tmp/library.xml
 
 echo "Starting kiwix-serve..."
+./kiwix-serve --verbose --port 8080 --library /tmp/library.xml & echo $! > /tmp/kiwix.pid
 
-exec ./kiwix-serve --verbose --port 8080 --library /kiwix/tools/library.xml $ZIM_FILES
+while true; do
+    sleep 240
+    update_and_restart
+done
