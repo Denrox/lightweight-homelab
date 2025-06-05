@@ -20,6 +20,11 @@ generate_library_xml() {
             echo "        <url>http://wiki.root</url>"
             echo "    </book>"
         else
+            # Create empty library for kiwix-manage
+            echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" > /tmp/temp.xml
+            echo "<library version=\"20110515\">" >> /tmp/temp.xml
+            echo "</library>" >> /tmp/temp.xml
+            
             for zimfile in $1; do
                 filename=$(basename "$zimfile")
                 id="${filename%.*}"
@@ -27,9 +32,10 @@ generate_library_xml() {
                 
                 ./kiwix-manage /tmp/temp.xml add "$zimfile"
                 
-                awk '/<book/{p=1}/book>/{print;p=0}p' /tmp/temp.xml
-                rm -f /tmp/temp.xml
+                # Extract all book entries except the first and last lines (library tags)
+                sed -n '/<book/,/<\/book>/p' /tmp/temp.xml
             done
+            rm -f /tmp/temp.xml
         fi
         echo "</library>"
     } > /tmp/library.xml.new
