@@ -51,14 +51,38 @@ update_and_restart() {
     
     if ! cmp -s /tmp/library.xml.new /tmp/library.xml; then
         echo "Library content changed, updating..."
-        mv /tmp/library.xml.new /tmp/library.xml
         
+        # First move the new library file to a temporary location
+        mv /tmp/library.xml.new /tmp/library.xml.tmp
+        
+        # If kiwix is running, stop it gracefully
         if [ -f /tmp/kiwix.pid ]; then
-            kill $(cat /tmp/kiwix.pid)
+            pid=$(cat /tmp/kiwix.pid)
+            if kill -0 "$pid" 2>/dev/null; then
+                echo "Stopping kiwix-serve..."
+                kill "$pid"
+                # Wait for process to stop
+                for i in $(seq 1 30); do
+                    if ! kill -0 "$pid" 2>/dev/null; then
+                        break
+                    fi
+                    sleep 1
+                done
+                # Force kill if still running
+                if kill -0 "$pid" 2>/dev/null; then
+                    kill -9 "$pid"
+                fi
+            fi
             rm /tmp/kiwix.pid
         fi
         
+        # Now it's safe to update the library file
+        mv /tmp/library.xml.tmp /tmp/library.xml
+        
+        echo "Starting new kiwix-serve instance..."
         ./kiwix-serve --verbose --port 8080 --library /tmp/library.xml & echo $! > /tmp/kiwix.pid
+        # Give kiwix time to start
+        sleep 2
     else
         echo "No changes in library content"
         rm /tmp/library.xml.new
@@ -69,9 +93,12 @@ update_and_restart() {
 ZIM_FILES=$(find /kiwix-data -name "*.zim" -type f -mmin +5 | tr '\n' ' ')
 echo "Generating initial library.xml..."
 generate_library_xml "$ZIM_FILES"
+mv /tmp/library.xml.new /tmp/library.xml
 
 echo "Starting kiwix-serve..."
 ./kiwix-serve --verbose --port 8080 --library /tmp/library.xml & echo $! > /tmp/kiwix.pid
+# Give kiwix time to start
+sleep 2
 
 while true; do
     sleep 240
