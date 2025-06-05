@@ -6,11 +6,10 @@ if [ ! -d "/kiwix-data" ]; then
 fi
 
 generate_library_xml() {
-    {
-        echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
-        echo "<library version=\"20110515\">"
-    
+    {   
         if [ -z "$1" ]; then
+            echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
+            echo "<library version=\"20110515\">"
             echo "    <book id=\"waiting\">"
             echo "        <title>Waiting for Content</title>"
             echo "        <description>Please wait while content is being downloaded</description>"
@@ -19,6 +18,7 @@ generate_library_xml() {
             echo "        <date>2025</date>"
             echo "        <url>http://wiki.root</url>"
             echo "    </book>"
+            echo "</library>"
         else
             # Create empty library for kiwix-manage
             echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" > /tmp/temp.xml
@@ -37,7 +37,6 @@ generate_library_xml() {
             done
             rm -f /tmp/temp.xml
         fi
-        echo "</library>"
     } > /tmp/library.xml.new
 }
 
