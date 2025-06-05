@@ -43,7 +43,8 @@ generate_library_xml() {
 
 update_and_restart() {
     echo "Checking for ZIM files..."
-    NEW_ZIM_FILES=$(find /kiwix-data -name "*.zim" -type f | tr '\n' ' ')
+    # Find ZIM files modified more than 5 minutes ago
+    NEW_ZIM_FILES=$(find /kiwix-data -name "*.zim" -type f -mmin +5 | tr '\n' ' ')
     
     echo "Generating new library.xml..."
     generate_library_xml "$NEW_ZIM_FILES"
@@ -64,7 +65,8 @@ update_and_restart() {
     fi
 }
 
-ZIM_FILES=$(find /kiwix-data -name "*.zim" -type f | tr '\n' ' ')
+# Initial run - only include files modified more than 5 minutes ago
+ZIM_FILES=$(find /kiwix-data -name "*.zim" -type f -mmin +5 | tr '\n' ' ')
 echo "Generating initial library.xml..."
 generate_library_xml "$ZIM_FILES"
 
