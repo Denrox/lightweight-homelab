@@ -25,6 +25,10 @@ echo "Pulling registry:3.0.0 for arm64..."
 docker pull --platform linux/arm64 registry:3.0.0
 docker save registry:3.0.0 > images/registry-3.0.0-arm64.tar
 
+echo "Pulling registry:3.0.0 for armv7..."
+docker pull --platform linux/arm/v7 registry:3.0.0
+docker save registry:3.0.0 > images/registry-3.0.0-armv7.tar
+
 echo "Pulling nginx:1.28.0-perl for amd64..."
 docker pull --platform linux/amd64 nginx:1.28.0-perl
 docker save nginx:1.28.0-perl > images/nginx-1.28.0-perl-amd64.tar
@@ -32,6 +36,10 @@ docker save nginx:1.28.0-perl > images/nginx-1.28.0-perl-amd64.tar
 echo "Pulling nginx:1.28.0-perl for arm64..."
 docker pull --platform linux/arm64 nginx:1.28.0-perl
 docker save nginx:1.28.0-perl > images/nginx-1.28.0-perl-arm64.tar
+
+echo "Pulling nginx:1.28.0-perl for armv7..."
+docker pull --platform linux/arm/v7 nginx:1.28.0-perl
+docker save nginx:1.28.0-perl > images/nginx-1.28.0-perl-armv7.tar
 
 echo "Pulling gogs:0.13 for amd64..."
 docker pull --platform linux/amd64 gogs/gogs:0.13-amd64
@@ -41,6 +49,10 @@ echo "Pulling gogs:0.13 for arm64..."
 docker pull --platform linux/arm64 gogs/gogs:0.13-arm64
 docker save gogs/gogs:0.13-arm64 > images/gogs-0.13-arm64.tar
 
+echo "Pulling gogs:0.13 for armv7..."
+docker pull --platform linux/arm/v7 gogs/gogs:0.13-armv7
+docker save gogs/gogs:0.13-armv7 > images/gogs-0.13-armv7.tar
+
 echo "Pulling coredns/coredns:1.12.1 for arm64..."
 docker pull --platform linux/arm64 coredns/coredns:1.12.1
 docker save coredns/coredns:1.12.1 > images/coredns-1.12.1-arm64.tar
@@ -48,6 +60,10 @@ docker save coredns/coredns:1.12.1 > images/coredns-1.12.1-arm64.tar
 echo "Pulling coredns/coredns:1.12.1 for amd64..."
 docker pull --platform linux/amd64 coredns/coredns:1.12.1
 docker save coredns/coredns:1.12.1 > images/coredns-1.12.1-amd64.tar
+
+echo "Pulling coredns/coredns:1.12.1 for armv7..."
+docker pull --platform linux/arm/v7 coredns/coredns:1.12.1
+docker save coredns/coredns:1.12.1 > images/coredns-1.12.1-armv7.tar
 
 # Find and execute build.sh in each container directory
 for dir in containers/*/; do

@@ -35,6 +35,9 @@ case ${ARCH} in
     aarch64|arm64)
         ARCH_TAG="arm64"
         ;;
+    armv7l)
+        ARCH_TAG="armv7"
+        ;;
     *)
         echo "Unsupported architecture: ${ARCH}"
         exit 1
