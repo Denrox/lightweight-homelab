@@ -6,31 +6,33 @@ if [ ! -d "/kiwix-data" ]; then
 fi
 
 generate_library_xml() {
-    echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
-    echo "<library version=\"20110515\">"
+    {
+        echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
+        echo "<library version=\"20110515\">"
     
-    if [ -z "$1" ]; then
-        echo "    <book id=\"waiting\">"
-        echo "        <title>Waiting for Content</title>"
-        echo "        <description>Please wait while content is being downloaded</description>"
-        echo "        <language>eng</language>"
-        echo "        <creator>System</creator>"
-        echo "        <date>2025</date>"
-        echo "        <url>http://wiki.root</url>"
-        echo "    </book>"
-    else
-        for zimfile in $1; do
-            filename=$(basename "$zimfile")
-            id="${filename%.*}"
-            echo "Processing $filename..."
-            
-            ./kiwix-manage /tmp/temp.xml add "$zimfile"
-            
-            awk '/<book/{p=1}/book>/{print;p=0}p' /tmp/temp.xml >> /tmp/library.xml
-            rm -f /tmp/temp.xml
-        done
-    fi
-    echo "</library>"
+        if [ -z "$1" ]; then
+            echo "    <book id=\"waiting\">"
+            echo "        <title>Waiting for Content</title>"
+            echo "        <description>Please wait while content is being downloaded</description>"
+            echo "        <language>eng</language>"
+            echo "        <creator>System</creator>"
+            echo "        <date>2025</date>"
+            echo "        <url>http://wiki.root</url>"
+            echo "    </book>"
+        else
+            for zimfile in $1; do
+                filename=$(basename "$zimfile")
+                id="${filename%.*}"
+                echo "Processing $filename..." >&2
+                
+                ./kiwix-manage /tmp/temp.xml add "$zimfile"
+                
+                awk '/<book/{p=1}/book>/{print;p=0}p' /tmp/temp.xml
+                rm -f /tmp/temp.xml
+            done
+        fi
+        echo "</library>"
+    } > /tmp/library.xml.new
 }
 
 update_and_restart() {
@@ -38,7 +40,7 @@ update_and_restart() {
     NEW_ZIM_FILES=$(find /kiwix-data -name "*.zim" -type f | tr '\n' ' ')
     
     echo "Generating new library.xml..."
-    generate_library_xml "$NEW_ZIM_FILES" > /tmp/library.xml.new
+    generate_library_xml "$NEW_ZIM_FILES"
     
     if ! cmp -s /tmp/library.xml.new /tmp/library.xml; then
         echo "Library content changed, updating..."
@@ -58,7 +60,7 @@ update_and_restart() {
 
 ZIM_FILES=$(find /kiwix-data -name "*.zim" -type f | tr '\n' ' ')
 echo "Generating initial library.xml..."
-generate_library_xml "$ZIM_FILES" > /tmp/library.xml
+generate_library_xml "$ZIM_FILES"
 
 echo "Starting kiwix-serve..."
 ./kiwix-serve --verbose --port 8080 --library /tmp/library.xml & echo $! > /tmp/kiwix.pid
