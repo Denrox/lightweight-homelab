@@ -22,8 +22,8 @@ generate_library_xml() {
         else
             # Create empty library for kiwix-manage
             echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" > /tmp/temp.xml
-            echo "<library version=\"20110515\">" >> /tmp/temp.xml
-            echo "</library>" >> /tmp/temp.xml
+            echo "<library version=\"20110515\">" > /tmp/temp.xml
+            echo "</library>" > /tmp/temp.xml
             
             for zimfile in $1; do
                 filename=$(basename "$zimfile")
