@@ -88,11 +88,11 @@ echo
 check_port 80
 check_port 5000
 
-DEBIAN_CRON_IMAGE="images/docker:28.2.2-dind-alpine3.22-${ARCH_TAG}.tar"
+DEBIAN_CRON_IMAGE="images/docker:28.2.2-dind-${ARCH_TAG}.tar"
 if [ -f "${DEBIAN_CRON_IMAGE}" ]; then
     echo "Loading dind image from ${DEBIAN_CRON_IMAGE}...";
     docker load --input "${DEBIAN_CRON_IMAGE}";
-    docker tag docker:28.2.2-dind-alpine3.22-${ARCH_TAG} docker:28.2.2-dind-alpine3.22;
+    docker tag docker:28.2.2-dind-${ARCH_TAG} docker:28.2.2-dind;
 else
     echo "Error: dind image file not found at ${DEBIAN_CRON_IMAGE}";
     exit 1;

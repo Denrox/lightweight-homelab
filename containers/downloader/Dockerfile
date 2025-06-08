@@ -1,4 +1,4 @@
-FROM docker:28.2.2-dind-alpine3.22
+FROM docker:28.2.2-dind
 
 RUN mkdir -p /usr/local/bin/scripts
 
