@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Start the Docker daemon with TLS enabled
-dockerd-entrypoint.sh dockerd &
+# Start the Docker daemon
+dockerd &
 
 # Wait for Docker daemon to be ready
 until docker info > /dev/null 2>&1; do
@@ -11,6 +11,6 @@ done
 
 cd /usr/local/bin/scripts && ./cronscript.sh
 
-crond -f -d 8 &
+crond -f &
 
 tail -f /var/log/cron.log

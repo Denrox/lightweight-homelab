@@ -1,6 +1,7 @@
 services:
   downloader:
     image: downloader:latest
+    privileged: true
     volumes:
       - ../../data/volumes/downloader/data:/usr/local/data
       - ../../data/volumes/downloader/logs:/logs
