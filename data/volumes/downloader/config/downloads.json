@@ -68,6 +68,76 @@
       "pattern": "(noble\\/.+\\/stable)",
       "type": "pattern",
       "latest": false
+    },
+    {
+      "image": "nginx",
+      "type": "docker",
+      "namespace": "library"
+    },
+    {
+      "image": "node",
+      "type": "docker",
+      "namespace": "library"
+    },
+    {
+      "image": "ubuntu",
+      "type": "docker",
+      "namespace": "library"
+    },
+    {
+      "image": "debian",
+      "type": "docker",
+      "namespace": "library"
+    },
+    {
+      "image": "alpine",
+      "type": "docker",
+      "namespace": "library"
+    },
+    {
+      "image": "mysql",
+      "type": "docker",
+      "namespace": "library"
+    },
+    {
+      "image": "registry",
+      "type": "docker",
+      "namespace": "library"
+    },
+    {
+      "image": "postgres",
+      "type": "docker",
+      "namespace": "library"
+    },
+    {
+      "image": "php",
+      "type": "docker",
+      "namespace": "library"
+    },
+    {
+      "image": "redis",
+      "type": "docker",
+      "namespace": "library"
+    },
+    {
+      "image": "memcached",
+      "type": "docker",
+      "namespace": "library"
+    },
+    {
+      "image": "mongo",
+      "type": "docker",
+      "namespace": "library"
+    },
+    {
+      "image": "rabbitmq",
+      "type": "docker",
+      "namespace": "library"
+    },
+    {
+      "image": "traefik",
+      "type": "docker",
+      "namespace": "library"
     }
   ]
 } 

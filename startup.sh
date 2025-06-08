@@ -44,16 +44,15 @@ case ${ARCH} in
         ;;
 esac
 
-USAGE="Usage: $0 --ip <ip_address> [--reg] [--dns] [--dnsport <port>]"
+USAGE="Usage: $0 --ip <ip_address> [--dns] [--dnsport <port>]"
 if [ $# -eq 0 ]; then
     echo "Starting with default configuration"
     echo "For additional options:"
     echo "$USAGE"
-    echo "Example: $0 --ip 192.168.1.10 --reg --dns --dnsport 53"
+    echo "Example: $0 --ip 192.168.1.10 --dns --dnsport 53"
 fi
 
 FINAL_IP=""
-DOWNLOAD_REG=false
 STARTUP_DNS=false
 DNS_PORT="53"
 
@@ -62,10 +61,6 @@ while [[ $# -gt 0 ]]; do
         --ip)
             FINAL_IP="$2"
             shift 2
-            ;;
-        --reg)
-            DOWNLOAD_REG=true
-            shift
             ;;
         --dns)
             STARTUP_DNS=true
@@ -188,12 +183,5 @@ if [ "$STARTUP_DNS" = true ]; then
 fi
 
 cd ../../scripts || exit;
-
-if [ "$DOWNLOAD_REG" = true ]; then
-    echo "127.0.0.1 reg.root" >> /etc/hosts
-    echo "Downloading docker images..."
-    ./images.sh reg.root:5000
-    sed -i '/127\.0\.0\.1 reg\.root/d' /etc/hosts
-fi
 
 echo "Startup completed successfully"
