@@ -13,6 +13,11 @@ done
 
 cd /usr/local/bin/scripts && ./cronscript.sh
 
-crond -f &
+# Create log file and directory
+mkdir -p /var/log
+touch /var/log/cron.log
+
+# Start cron daemon (works for both Debian and Alpine)
+/usr/sbin/cron -f &
 
 tail -f /var/log/cron.log

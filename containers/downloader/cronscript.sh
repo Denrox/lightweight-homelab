@@ -2,23 +2,22 @@
 
 # Lock file setup
 LOCK_FILE="/tmp/cronscript.lock"
-LOCK_FD=200
 
-cleanup() {
-    # Release the lock and remove the lock file
-    flock -u "$LOCK_FD"
-    rm -f "$LOCK_FILE"
-}
-
-# Try to acquire the lock
-exec "$LOCK_FD">"$LOCK_FILE"
-if ! flock -n "$LOCK_FD"; then
-    echo "Another instance is already running. Exiting."
-    exit 1
+if [ -e "$LOCK_FILE" ]; then
+    if kill -0 $(cat "$LOCK_FILE") 2>/dev/null; then
+        echo "Another instance is already running. Exiting."
+        exit 1
+    else
+        # Stale lock file
+        rm -f "$LOCK_FILE"
+    fi
 fi
 
-# Set up cleanup on script exit
-trap cleanup EXIT
+# Store current PID in lock file
+echo $$ > "$LOCK_FILE"
+
+# Clean up lock file on exit
+trap 'rm -f "$LOCK_FILE"' EXIT
 
 LOG_DATE=$(date +%Y-%m-%d)
 LOG_FILE="/logs/${LOG_DATE}.log"
