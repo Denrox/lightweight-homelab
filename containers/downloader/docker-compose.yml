@@ -8,5 +8,4 @@ services:
       - ../../data/volumes/downloader/logs:/logs
       - ../../data/volumes/downloader/config:/config:ro
       - ../../data/volumes/downloader/mirror-rsync.d:/usr/local/bin/scripts/mirror-rsync.d
-      - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped 
