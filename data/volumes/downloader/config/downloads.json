@@ -100,11 +100,6 @@
       "namespace": "library"
     },
     {
-      "image": "registry",
-      "type": "docker",
-      "namespace": "library"
-    },
-    {
       "image": "postgres",
       "type": "docker",
       "namespace": "library"
@@ -126,6 +121,41 @@
     },
     {
       "image": "mongo",
+      "type": "docker",
+      "namespace": "library"
+    },
+    {
+      "image": "mariadb",
+      "type": "docker",
+      "namespace": "library"
+    },
+    {
+      "image": "python",
+      "type": "docker",
+      "namespace": "library"
+    },
+    {
+      "image": "busybox",
+      "type": "docker",
+      "namespace": "library"
+    },
+    {
+      "image": "ruby",
+      "type": "docker",
+      "namespace": "library"
+    },
+    {
+      "image": "registry",
+      "type": "docker",
+      "namespace": "library"
+    },
+    {
+      "image": "wordpress",
+      "type": "docker",
+      "namespace": "library"
+    },
+    {
+      "image": "perl",
       "type": "docker",
       "namespace": "library"
     },
