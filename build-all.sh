@@ -29,6 +29,18 @@ echo "Pulling registry:3.0.0 for armv7..."
 docker pull --platform linux/arm/v7 registry:3.0.0
 docker save registry:3.0.0 > images/registry-3.0.0-armv7.tar
 
+echo "Pulling registry docker-registry-browser:1.8.3 for amd64..."
+docker pull --platform linux/amd64 klausmeyer/docker-registry-browser:1.8.3
+docker save klausmeyer/docker-registry-browser:1.8.3 > images/docker-registry-browser-1.8.3-amd64.tar
+
+echo "Pulling registry docker-registry-browser:1.8.3 for arm64..."
+docker pull --platform linux/arm64 klausmeyer/docker-registry-browser:1.8.3
+docker save klausmeyer/docker-registry-browser:1.8.3 > images/docker-registry-browser-1.8.3-arm64.tar
+
+echo "Pulling registry docker-registry-browser:1.8.3 for armv7..."
+docker pull --platform linux/arm/v7 klausmeyer/docker-registry-browser:1.8.3
+docker save klausmeyer/docker-registry-browser:1.8.3 > images/docker-registry-browser-1.8.3-armv7.tar
+
 echo "Pulling nginx:1.28.0-perl for amd64..."
 docker pull --platform linux/amd64 nginx:1.28.0-perl
 docker save nginx:1.28.0-perl > images/nginx-1.28.0-perl-amd64.tar

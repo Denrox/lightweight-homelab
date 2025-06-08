@@ -125,6 +125,15 @@ else
     exit 1;
 fi
 
+REGISTRY_BROWSER_IMAGE="images/docker-registry-browser-1.8.3-${ARCH_TAG}.tar";
+if [ -f "${REGISTRY_BROWSER_IMAGE}" ]; then
+    echo "Loading registry browser image from ${REGISTRY_BROWSER_IMAGE}...";
+    docker load --input "${REGISTRY_BROWSER_IMAGE}";
+else
+    echo "Error: registry browser image file not found at ${REGISTRY_BROWSER_IMAGE}";
+    exit 1;
+fi
+
 WIKI_IMAGE="images/wiki-${ARCH_TAG}.tar";
 if [ -f "${WIKI_IMAGE}" ]; then
     echo "Loading wiki image from ${WIKI_IMAGE}...";
