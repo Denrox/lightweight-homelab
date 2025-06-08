@@ -1,7 +1,9 @@
 #!/bin/bash
 
+sleep 10
+
 # Start the Docker daemon
-dockerd &
+dockerd --pidfile /var/run/docker.pid &
 
 # Wait for Docker daemon to be ready
 until docker info > /dev/null 2>&1; do
