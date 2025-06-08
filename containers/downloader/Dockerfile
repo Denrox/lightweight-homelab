@@ -1,19 +1,5 @@
 FROM docker:28.2.2-dind-alpine3.22
 
-RUN apk add --no-cache \
-    curl \
-    ca-certificates \
-    cron \
-    wget \
-    rsync \
-    sed \
-    gawk \
-    gzip \
-    iputils \
-    xz \
-    jq \
-    bash
-
 RUN mkdir -p /usr/local/bin/scripts
 
 COPY downloader.sh mirror-rsync.sh entrypoint.sh cronscript.sh /usr/local/bin/scripts/

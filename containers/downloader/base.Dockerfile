@@ -5,6 +5,7 @@ RUN apk add --no-cache \
     wget \
     rsync \
     sed \
+    curl \
     gawk \
     gzip \
     iputils \
