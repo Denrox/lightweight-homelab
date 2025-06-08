@@ -40,8 +40,6 @@ This scripts starts all services in docker.
 
 **How to run:**
 ```bash
-./startup.sh; # Start services without dns and downloading docker images and iso images
-./startup.sh --ip 192.168.0.1 --dns --dnsport 53; # Ip address on which the services are deployed and dns port
-./startup.sh --ip 192.168.0.1 --dns --dnsport 53 --os --reg; # Add flags to download os images for dome linux distros and to download docker images
+./startup.sh;
 ```
 
