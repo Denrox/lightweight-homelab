@@ -182,6 +182,4 @@ if [ "$STARTUP_DNS" = true ]; then
     docker compose up -d;
 fi
 
-cd ../../scripts || exit;
-
 echo "Startup completed successfully"
