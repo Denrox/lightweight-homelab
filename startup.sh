@@ -19,13 +19,27 @@ check_command() {
     fi
 }
 
+prompt_yn() {
+    local prompt="$1"
+    local default="$2"
+    local answer
+    
+    if [ "$default" = "y" ]; then
+        prompt="$prompt [Y/n]"
+    else
+        prompt="$prompt [y/N]"
+    fi
+    
+    read -p "$prompt " answer
+    answer=${answer:-$default}
+    case "$answer" in
+        [Yy]*) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
 check_command docker
 check_command netstat
-
-if ! docker compose version &> /dev/null; then
-    echo "Error: docker compose must be installed"
-    exit 1
-fi
 
 ARCH=$(uname -m)
 case ${ARCH} in
@@ -44,49 +58,31 @@ case ${ARCH} in
         ;;
 esac
 
-USAGE="Usage: $0 --ip <ip_address> [--dns] [--dnsport <port>]"
-if [ $# -eq 0 ]; then
-    echo "Starting with default configuration"
-    echo "For additional options:"
-    echo "$USAGE"
-    echo "Example: $0 --ip 192.168.1.10 --dns --dnsport 53"
+echo "Lightweight Homelab Setup"
+echo "========================"
+echo
+
+# Interactive configuration
+if prompt_yn "Enable DNS server?" "n"; then
+    STARTUP_DNS=true
+    read -p "Enter IP address: " FINAL_IP
+    if [ -z "$FINAL_IP" ]; then
+        echo "Error: IP address must be provided when DNS is enabled"
+        exit 1
+    fi
+    check_port 53
+else
+    STARTUP_DNS=false
+    FINAL_IP=""
 fi
+echo
 
-FINAL_IP=""
-STARTUP_DNS=false
-DNS_PORT="53"
-
-while [[ $# -gt 0 ]]; do
-    case $1 in
-        --ip)
-            FINAL_IP="$2"
-            shift 2
-            ;;
-        --dns)
-            STARTUP_DNS=true
-            shift
-            ;;
-        --dnsport)
-            DNS_PORT="$2"
-            shift 2
-            ;;
-        *)
-            echo "Unknown parameter: $1"
-            echo "$USAGE"
-            exit 1
-            ;;
-    esac
-done
-
-if [ "$STARTUP_DNS" = true ]; then
-    check_port ${DNS_PORT}
+if prompt_yn "Download Ubuntu APT mirror?" "n"; then
+    DOWNLOAD_MIRROR=true
+else
+    DOWNLOAD_MIRROR=false
 fi
-
-if [ -z "$FINAL_IP" ] && [ "$STARTUP_DNS" = true ]; then
-    echo "Error: IP address must be provided with --ip parameter when DNS is enabled"
-    echo "$USAGE"
-    exit 1
-fi
+echo
 
 check_port 80
 check_port 5000
@@ -155,6 +151,7 @@ if [ "$(docker ps -q -f name=downloader)" ]; then
     echo "Downloader service is already running...";
 else
     echo "Starting downloader service...";
+    export DOWNLOAD_MIRROR
     docker compose up -d;
 fi
 
@@ -177,9 +174,10 @@ docker compose up -d;
 if [ "$STARTUP_DNS" = true ]; then
     cd ../coredns || exit;
     sed -i "s/192\.168\.0\.1/${FINAL_IP}/g" ../../data/volumes/coredns/config/Corefile
-    sed -i "s/53\:53\/udp/${DNS_PORT}\:${DNS_PORT}\/udp/g" docker-compose.yaml
     echo "Starting coredns service...";
     docker compose up -d;
 fi
+
+echo "{\"mirrors\": ${DOWNLOAD_MIRROR}}" > data/volumes/downloader/config/config.json
 
 echo "Startup completed successfully"

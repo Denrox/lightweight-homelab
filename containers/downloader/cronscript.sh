@@ -16,6 +16,20 @@ if ! ping -c 1 google.com &> /dev/null && ! ping -c 1 cloudflare.com &> /dev/nul
     exit 0
 fi
 
+CONFIG_FILE="/config/config.json"
+if [ ! -f "$CONFIG_FILE" ]; then
+    echo "Error: Config file not found at $CONFIG_FILE"
+    exit 1
+fi
+
+MIRRORS_ENABLED=$(jq -r '.mirrors' "$CONFIG_FILE")
+if [ "$MIRRORS_ENABLED" = "true" ]; then
+    echo "Mirrors enabled, running mirror-rsync script..."
+    ./mirror-rsync.sh
+else
+    echo "Mirrors disabled, skipping mirror-rsync"
+fi
+
 download_if_not_exists() {
     local target_dir="$1"
     local url="$2"
@@ -102,8 +116,5 @@ echo "Processing Docker image mirroring..."
 jq -r '.downloads[] | select(.type == "docker") | "\(.image)|\(.namespace)"' "$CONFIG_FILE" | while IFS='|' read -r image namespace; do
     mirror_docker_image "$image" "$namespace"
 done
-
-# Run mirror-rsync at the end
-./mirror-rsync.sh
 
 echo "=== Download completed at $(date) ==="
