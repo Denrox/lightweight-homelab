@@ -1,6 +1,19 @@
 FROM docker:28.2.2-dind
 
-RUN mkdir -p /usr/local/bin/scripts
+RUN apt-get update && apt-get install -y \
+    cron \
+    wget \
+    rsync \
+    sed \
+    curl \
+    gawk \
+    gzip \
+    iputils-ping \
+    xz-utils \
+    jq \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /usr/local/bin/scripts /etc/cron.d /var/log
 
 COPY downloader.sh mirror-rsync.sh entrypoint.sh cronscript.sh /usr/local/bin/scripts/
 RUN chmod +x /usr/local/bin/scripts/*.sh

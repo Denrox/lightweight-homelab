@@ -4,32 +4,29 @@ docker buildx create --name multiarch --use || true
 
 echo "Building amd64 image..."
 docker buildx build --platform linux/amd64 \
-  -t docker:28.2.2-dind-amd64 \
-  -f base.Dockerfile \
+  -t downloader:amd64 \
   --load .
 
 echo "Building arm64 image..."
 docker buildx build --platform linux/arm64 \
-  -t docker:28.2.2-dind-arm64 \
-  -f base.Dockerfile \
+  -t downloader:arm64 \
   --load .
 
 echo "Building armv7 image..."
 docker buildx build --platform linux/arm/v7 \
-  -t docker:28.2.2-dind-armv7 \
-  -f base.Dockerfile \
+  -t downloader:armv7 \
   --load .
 
 echo "Exporting amd64 image..."
-docker save docker:28.2.2-dind-amd64 > ../../images/docker:28.2.2-dind-amd64.tar
+docker save downloader:amd64 > ../../images/downloader-amd64.tar
 
 echo "Exporting arm64 image..."
-docker save docker:28.2.2-dind-arm64 > ../../images/docker:28.2.2-dind-arm64.tar
+docker save downloader:arm64 > ../../images/downloader-arm64.tar
 
 echo "Exporting armv7 image..."
-docker save docker:28.2.2-dind-armv7 > ../../images/docker:28.2.2-dind-armv7.tar
+docker save downloader:armv7 > ../../images/downloader-armv7.tar
 
-echo "Base images have been created and exported to docker:28.2.2-dind-amd64.tar and docker:28.2.2-dind-arm64.tar and docker:28.2.2-dind-armv7.tar"
+echo "Base images have been created and exported to downloader-amd64.tar and downloader-arm64.tar and downloader-armv7.tar"
 
 docker buildx rm multiarch
 docker buildx use default

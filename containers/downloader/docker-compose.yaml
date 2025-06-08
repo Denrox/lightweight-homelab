@@ -1,8 +1,6 @@
 services:
   downloader:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: downloader:latest
     volumes:
       - ../../data/volumes/downloader/data:/usr/local/data
       - ../../data/volumes/downloader/logs:/logs

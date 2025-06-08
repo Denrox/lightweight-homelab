@@ -88,13 +88,13 @@ echo
 check_port 80
 check_port 5000
 
-DEBIAN_CRON_IMAGE="images/docker:28.2.2-dind-${ARCH_TAG}.tar"
-if [ -f "${DEBIAN_CRON_IMAGE}" ]; then
-    echo "Loading dind image from ${DEBIAN_CRON_IMAGE}...";
-    docker load --input "${DEBIAN_CRON_IMAGE}";
-    docker tag docker:28.2.2-dind-${ARCH_TAG} docker:28.2.2-dind;
+DOWNLOADER_IMAGE="images/downloader-${ARCH_TAG}.tar"
+if [ -f "${DOWNLOADER_IMAGE}" ]; then
+    echo "Loading downloader image from ${DOWNLOADER_IMAGE}...";
+    docker load --input "${DOWNLOADER_IMAGE}";
+    docker tag downloader:${ARCH_TAG} downloader:latest;
 else
-    echo "Error: dind image file not found at ${DEBIAN_CRON_IMAGE}";
+    echo "Error: downloader image file not found at ${DOWNLOADER_IMAGE}";
     exit 1;
 fi
 
