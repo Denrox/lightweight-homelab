@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 if ! docker compose version &> /dev/null; then
     echo "Error: docker compose must be installed"
     exit 1
@@ -178,6 +179,7 @@ if [ "$STARTUP_DNS" = true ]; then
     docker compose up -d;
 fi
 
-echo "{\"mirrors\": ${DOWNLOAD_MIRROR}}" > data/volumes/downloader/config/config.json
+cd ../..;
+echo "{\"mirrors\": ${DOWNLOAD_MIRROR}}" > data/volumes/downloader/config/config.json;
 
-echo "Startup completed successfully"
+echo "Startup completed successfully";
