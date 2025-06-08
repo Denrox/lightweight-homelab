@@ -1,17 +1,17 @@
-FROM 28.2.2-dind-alpine3.22
+FROM docker:28.2.2-dind-alpine3.22
 
-RUN apt-get update && apt-get install -y \
-    cron \
+RUN apk add --no-cache \
+    dcron \
     wget \
     rsync \
     sed \
     gawk \
     gzip \
-    iputils-ping \
-    xz-utils \
+    iputils \
+    xz \
     jq \
-    && rm -rf /var/lib/apt/lists/*
+    bash
 
 RUN touch /var/log/cron.log
 
-CMD ["cron", "-f"]
+CMD ["crond", "-f", "-d", "8"]
