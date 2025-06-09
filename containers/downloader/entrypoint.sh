@@ -2,6 +2,18 @@
 
 sleep 10
 
+# Kill any existing Docker daemon process
+if [ -f /var/run/docker.pid ]; then
+    pid=$(cat /var/run/docker.pid)
+    if kill -0 $pid 2>/dev/null; then
+        kill -9 $pid
+    fi
+    rm -f /var/run/docker.pid
+fi
+
+# Clean up any existing Docker socket
+rm -f /var/run/docker.sock
+
 # Start the Docker daemon
 dockerd --pidfile /var/run/docker.pid &
 
