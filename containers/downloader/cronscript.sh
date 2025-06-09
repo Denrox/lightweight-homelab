@@ -64,7 +64,7 @@ mirror_docker_image() {
     local image="$1"
     local namespace="$2"
     local registry_url="registry:5000"
-    local architectures=("amd64" "arm64")
+    local architectures=("amd64" "arm64" "armv7")
     local alt_registries=(
         "mirror.gcr.io/library/"
         "quay.io/library/"
