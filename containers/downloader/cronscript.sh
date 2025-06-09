@@ -63,7 +63,7 @@ download_if_not_exists() {
 mirror_docker_image() {
     local image="$1"
     local namespace="$2"
-    local registry_url="reg.root:5000"
+    local registry_url="registry:5000"
     local architectures=("amd64" "arm64")
     
     echo "Processing Docker image: $image from namespace: $namespace"
@@ -72,7 +72,7 @@ mirror_docker_image() {
     
     tag_count=0
     while IFS= read -r line; do
-        if [ $tag_count -ge 3 ]; then
+        if [ $tag_count -ge 2 ]; then
             break
         fi
 
@@ -97,7 +97,7 @@ mirror_docker_image() {
                 echo "pushed $desttagname"
                 
                 docker rmi $tagname $desttagname &> /dev/null
-                sleep 10
+                sleep 600
             done
             ((tag_count++))
         fi
