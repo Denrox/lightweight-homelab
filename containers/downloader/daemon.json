@@ -2,6 +2,7 @@
   "hosts": ["unix:///var/run/docker.sock"],
   "storage-driver": "overlay2",
   "log-driver": "json-file",
+  "insecure-registries": ["registry:5000"],
   "log-opts": {
     "max-size": "10m",
     "max-file": "3"
