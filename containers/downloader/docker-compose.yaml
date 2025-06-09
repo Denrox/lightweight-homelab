@@ -8,3 +8,9 @@ services:
       - ../../data/volumes/downloader/config:/config:ro
       - ../../data/volumes/downloader/mirror-rsync.d:/usr/local/bin/scripts/mirror-rsync.d
     restart: unless-stopped
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    external: true
