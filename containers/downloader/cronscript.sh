@@ -65,6 +65,11 @@ mirror_docker_image() {
     local namespace="$2"
     local registry_url="registry:5000"
     local architectures=("amd64" "arm64")
+    local alt_registries=(
+        "mirror.gcr.io/library/"
+        "quay.io/library/"
+        ""  # Empty string for Docker Hub
+    )
     
     echo "Processing Docker image: $image from namespace: $namespace"
     
@@ -85,9 +90,25 @@ mirror_docker_image() {
                     tagname="$image:$line"
                 fi
                 
-                if ! docker pull --platform "linux/$arch" $tagname &> /dev/null; then
-                    echo "Failed to pull $tagname for $arch, skipping..."
-                    continue
+                # Try pulling from alternative registries first
+                pull_success=0
+                for registry in "${alt_registries[@]}"; do
+                    if [ -n "$registry" ]; then
+                        if docker pull --platform "linux/$arch" "${registry}${image}:${line}" &> /dev/null; then
+                            tagname="${registry}${image}:${line}"
+                            pull_success=1
+                            echo "Successfully pulled from $registry"
+                            break
+                        fi
+                    fi
+                done
+
+                # If all alternative registries failed, try Docker Hub
+                if [ $pull_success -eq 0 ]; then
+                    if ! docker pull --platform "linux/$arch" $tagname &> /dev/null; then
+                        echo "Failed to pull $tagname for $arch from all registries, skipping..."
+                        continue
+                    fi
                 fi
                 
                 desttagname="$registry_url/$image:$line-$arch"
@@ -97,7 +118,7 @@ mirror_docker_image() {
                 echo "pushed $desttagname"
                 
                 docker rmi $tagname $desttagname &> /dev/null
-                sleep 600
+                sleep 120
             done
             ((tag_count++))
         fi
