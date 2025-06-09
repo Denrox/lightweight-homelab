@@ -171,6 +171,9 @@ docker compose up -d;
 
 cd ../registry || exit;
 echo "Starting registry service...";
+# Generate random secret key
+RANDOM_SECRET=$(head -c 32 /dev/urandom | base64)
+sed -i "s/SECRET_KEY_BASE=some-secret-key/SECRET_KEY_BASE=$RANDOM_SECRET/" docker-compose.yaml
 docker compose up -d;
 
 cd ../gogs || exit;
