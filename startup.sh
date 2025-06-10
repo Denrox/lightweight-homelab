@@ -98,6 +98,16 @@ else
     exit 1;
 fi
 
+HOME_IMAGE="images/home-${ARCH_TAG}.tar";
+if [ -f "${HOME_IMAGE}" ]; then
+    echo "Loading home image from ${HOME_IMAGE}...";
+    docker load --input "${HOME_IMAGE}";
+    docker tag home:${ARCH_TAG} home:latest;
+else
+    echo "Error: home image file not found at ${HOME_IMAGE}";
+    exit 1;
+fi
+
 NGINX_IMAGE="images/nginx-1.28.0-perl-${ARCH_TAG}.tar";
 if [ -f "${NGINX_IMAGE}" ]; then
     echo "Loading nginx image from ${NGINX_IMAGE}...";
@@ -193,5 +203,17 @@ fi
 
 cd ../..;
 echo "{\"mirrors\": ${DOWNLOAD_MIRROR}}" > data/volumes/downloader/config/config.json;
+
+cat > containers/home/app/config/config.json << EOF
+{
+    "dns": {
+        "disabled": $([[ "$STARTUP_DNS" != "true" ]] && echo "true" || echo "false"),
+        "ip": "${FINAL_IP:-192.168.0.1}"
+    },
+    "mirror": {
+        "disabled": $([[ "$DOWNLOAD_MIRROR" != "true" ]] && echo "true" || echo "false")
+    }
+}
+EOF
 
 echo "Startup completed successfully";

@@ -1,0 +1,16 @@
+services:
+  home:
+    image: home:latest
+    container_name: home
+    restart: always
+    volumes:
+      - ./app:/app
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    external: true
