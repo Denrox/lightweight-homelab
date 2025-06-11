@@ -3,7 +3,7 @@ services:
     image: klausmeyer/docker-registry-browser:1.8.3
     container_name: registry-browser
     environment:
-      - "SECRET_KEY_BASE=some-secret-key"
+      - "SECRET_KEY_BASE=cTpIR0MdZw7zL5C37jKizDJHkuOyz+o6zIcIXXSjwiE="
       - "DOCKER_REGISTRY_URL=http://registry:5000"
       - "ENABLE_DELETE_IMAGES=true"
       - "PUBLIC_REGISTRY_URL=reg.root:5000"

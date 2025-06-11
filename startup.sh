@@ -190,6 +190,10 @@ cd ../gogs || exit;
 echo "Starting gogs service...";
 docker compose up -d;
 
+cd ../home || exit;
+echo "Starting home service...";
+docker compose up -d;
+
 cd ../nginx || exit;
 echo "Starting nginx service...";
 docker compose up -d;
