@@ -6,7 +6,7 @@
         192.168.0.1 wiki.root
         192.168.0.1 mirror.root
         192.168.0.1 reg.root
-        192.168.0.1 main.root
+        192.168.0.1 home.root
         192.168.0.1 git.root
         fallthrough
     }
