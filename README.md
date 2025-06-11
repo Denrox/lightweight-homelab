@@ -14,6 +14,7 @@ After you complete the setup you will get a nginx server which listens on port 8
 - reg.root:5000
 - files.root
 - wiki.root
+- home.root
 
 ### Build requirements
 - A linux machine amd64.
