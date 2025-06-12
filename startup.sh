@@ -165,6 +165,16 @@ else
     exit 1;
 fi
 
+TRILIUM_IMAGE="images/trilium-0.63.7-${ARCH_TAG}.tar";
+if [ -f "${TRILIUM_IMAGE}" ]; then
+    echo "Loading trilium image from ${TRILIUM_IMAGE}...";
+    docker load --input "${TRILIUM_IMAGE}";
+    docker tag zadam/trilium:0.63.7 trilium:0.63.7;
+else
+    echo "Error: trilium image file not found at ${TRILIUM_IMAGE}";
+    exit 1;
+fi
+
 cd containers/downloader || exit;
 
 if [ "$(docker ps -q -f name=downloader)" ]; then
@@ -192,6 +202,10 @@ docker compose up -d;
 
 cd ../home || exit;
 echo "Starting home service...";
+docker compose up -d;
+
+cd ../trilium || exit;
+echo "Starting trilium service...";
 docker compose up -d;
 
 cd ../nginx || exit;

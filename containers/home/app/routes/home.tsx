@@ -16,7 +16,8 @@ const hosts = [
   { address: 'mirror.root', name: 'APT Mirror' },
   { address: 'files.root', name: 'Files' },
   { address: 'git.root', name: 'Git (gogs)' },
-  { address: 'wiki.root', name: 'Wiki (kiwix)' }
+  { address: 'wiki.root', name: 'Wiki (kiwix)' },
+  { address: 'notes.root', name: 'Notes (trilium)' }
 ];
 
 const getPages = (config: { mirror: { disabled: boolean }, dns: { disabled: boolean, ip: string } }): { url: string, disabled?: boolean, name: string, description: string }[] => [
@@ -25,6 +26,7 @@ const getPages = (config: { mirror: { disabled: boolean }, dns: { disabled: bool
   { url: `http://${hosts[2].address}`, name: hosts[2].name, description: 'Downloads defined in your downloads.json' },
   { url: `http://${hosts[3].address}`, name: hosts[3].name, description: 'Git server for your projects' },
   { url: `http://${hosts[4].address}`, name: hosts[4].name, description: 'Wiki server' },
+  { url: `http://${hosts[5].address}`, name: hosts[5].name, description: 'Notes (trilium)' },
   { url: `http://${config.dns.ip}`, disabled: config.dns.disabled, name: config.dns.disabled ? `DNS (disabled)` : 'DNS', description: config.dns.disabled ? 'DNS server is not running. You need to configures following hosts on your router manually: ' + hosts.map((host) => host.address).join(', ') : 'DNS server is running on this IP. Please add this IP as a settings for DNS server on your router.' },
 ];
 

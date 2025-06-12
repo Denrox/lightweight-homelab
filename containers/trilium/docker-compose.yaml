@@ -1,0 +1,15 @@
+services:
+  trilium:
+    image: trilium:0.63.7
+    hostname: trilium
+    restart: always
+    environment:
+      - TRILIUM_DATA_DIR=/home/node/trilium-data
+    volumes:
+      - ../../data/volumes/trilium/data:/home/node/trilium-data
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    external: true

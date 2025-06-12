@@ -77,6 +77,18 @@ echo "Pulling coredns/coredns:1.12.1 for armv7..."
 docker pull --platform linux/arm/v7 coredns/coredns:1.12.1
 docker save coredns/coredns:1.12.1 > images/coredns-1.12.1-armv7.tar
 
+echo "Pulling trillum for amd64..."
+docker pull --platform linux/amd64 zadam/trilium:0.63.7
+docker save zadam/trilium:0.63.7 > images/trilium-0.63.7-amd64.tar
+
+echo "Pulling trillum for arm64..."
+docker pull --platform linux/arm64 zadam/trilium:0.63.7
+docker save zadam/trilium:0.63.7 > images/trilium-0.63.7-arm64.tar
+
+echo "Pulling trillum for armv7..."
+docker pull --platform linux/arm/v7 zadam/trilium:0.63.7
+docker save zadam/trilium:0.63.7 > images/trilium-0.63.7-armv7.tar
+
 # Find and execute build.sh in each container directory
 for dir in containers/*/; do
     if [ -f "${dir}build.sh" ]; then

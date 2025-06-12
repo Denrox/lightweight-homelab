@@ -12,3 +12,5 @@ data/volumes/downloader/logs/*
 !data/volumes/downloader/logs/.gitkeep
 data/volumes/gogs/gogs/*
 !data/volumes/gogs/gogs/.gitkeep
+data/volumes/trilium/data/*
+!data/volumes/trilium/data/.gitkeep
