@@ -2,6 +2,8 @@ images/*
 !images/.gitkeep
 data/volumes/downloader/data/files/download.docker.com/*
 !data/volumes/downloader/data/files/download.docker.com/.gitkeep
+data/volumes/downloader/data/files/os/*
+!data/volumes/downloader/data/files/os/.gitkeep
 data/volumes/downloader/data/packages/*
 !data/volumes/downloader/data/packages/.gitkeep
 data/volumes/downloader/data/mirror-tmp/*
