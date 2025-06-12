@@ -11,4 +11,4 @@ export default function Title({ title }: TitleProps) {
       {title}
     </div>
   );
-};
+}

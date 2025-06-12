@@ -208,7 +208,7 @@ fi
 cd ../..;
 echo "{\"mirrors\": ${DOWNLOAD_MIRROR}}" > data/volumes/downloader/config/config.json;
 
-cat > containers/home/app/config/config.json << EOF
+cat > containers/home/public/config.json << EOF
 {
     "dns": {
         "disabled": $([[ "$STARTUP_DNS" != "true" ]] && echo "true" || echo "false"),
