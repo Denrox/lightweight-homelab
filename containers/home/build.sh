@@ -3,12 +3,13 @@
 # Get the script's directory
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 
-# Change to the script directory and stay there
-cd "$SCRIPT_DIR"
-
-# Build on host machine first
-npm ci
-npm run build
+# First build in container and output to host
+echo "Building in container..."
+docker run --rm \
+  -v "$SCRIPT_DIR:/src" \
+  -w /src \
+  node:22.16.0-alpine3.22 \
+  sh -c "npm ci && npm run build"
 
 docker buildx create --name multiarch --use || true
 
