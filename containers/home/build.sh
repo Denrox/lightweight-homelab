@@ -9,7 +9,7 @@ docker run --rm \
   -v "$SCRIPT_DIR:/src" \
   -w /src \
   node:22.16.0-alpine3.22 \
-  sh -c "npm ci && npm run build"
+  sh -c "mkdir -p app/config && rm -rf app/config/config.json && cp app/config/config.build.json app/config/config.json && npm ci && npm run build"
 
 docker buildx create --name multiarch --use || true
 

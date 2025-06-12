@@ -5,6 +5,7 @@ services:
     restart: always
     volumes:
       - ./app:/app
+      - ./public/config.json:/application/client/public/config.json
     environment:
       - NODE_ENV=production
       - PORT=3000
