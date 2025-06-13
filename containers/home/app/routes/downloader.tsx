@@ -5,6 +5,7 @@ import appConfig from "~/config/config.json";
 import Title from "~/components/shared/title/title";
 import { useEffect, useState, useMemo } from "react";
 import classNames from "classnames";
+import ContentBlock from "~/components/shared/content-block/content-block";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -59,9 +60,9 @@ export default function Downloader() {
           }}>{log.name}</div>
         ))}
       </div>
-      <div className="w-full overflow-y-auto p-[24px] border-[1px] border-gray-200 shadow-md rounded-md flex-1">
+      <ContentBlock className="flex-1">
         <pre className="whitespace-pre-wrap text-[14px]">{selectedLogContent}</pre>
-      </div>
+      </ContentBlock>
     </div>
   );
 }
