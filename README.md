@@ -7,6 +7,7 @@ This project is a lightweight homelab setup which supports arm64, amd64, and arm
 - file server (with docker deb files for all architectures, also automatically updated). Also it automatically downloads os images for ubuntu, debian
 - private docker registry
 - ubuntu apt mirror
+- trilium (notes app)
 - coredns resolver
 
 After you complete the setup you will get a nginx server which listens on port 80 to the following domains:
@@ -15,6 +16,7 @@ After you complete the setup you will get a nginx server which listens on port 8
 - files.root
 - wiki.root
 - home.root
+- notes.root
 
 ### Build requirements
 - A linux machine amd64.
