@@ -1,3 +1,4 @@
 {
-  "url": "http://home.root"
+  "url": "http://home.root",
+  "downloaderLogsDir": "/downloader/logs"
 }

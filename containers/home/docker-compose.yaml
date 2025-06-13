@@ -6,6 +6,7 @@ services:
     volumes:
       - ./app:/app
       - ./public/config.json:/application/build/client/config.json
+      - ../../data/downloader/logs:/downloader/logs
     environment:
       - NODE_ENV=production
       - PORT=3000

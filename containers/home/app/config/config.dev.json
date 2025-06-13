@@ -1,3 +1,4 @@
 {
-  "url": "http://localhost:5173"
+  "url": "http://localhost:5173",
+  "downloaderLogsDir": "../../data/downloader/logs"
 }
