@@ -1,4 +1,13 @@
 {
   "url": "http://localhost:5173",
-  "downloaderLogsDir": "../../data/volumes/downloader/logs"
+  "downloaderLogsDir": "../../data/volumes/downloader/logs",
+  "hosts": [
+    { "id": "regUI", "address": "reg.root", "name": "Docker Registry UI", "description": "Web UI for Docker Registry" },
+    { "id": "reg", "address": "reg.root:5000", "name": "Docker Registry", "description": "Docker Registry" },
+    { "id": "mirror", "address": "mirror.root", "name": "APT Mirror", "description": "APT Mirror for Ubuntu" },
+    { "id": "files", "address": "files.root", "name": "Files", "description": "Downloads defined in your downloads.json" },
+    { "id": "git", "address": "git.root", "name": "Git (gogs)", "description": "Git server for your projects" },
+    { "id": "wiki", "address": "wiki.root", "name": "Wiki (kiwix)", "description": "Wiki server" },
+    { "id": "notes", "address": "notes.root", "name": "Notes (trilium)", "description": "Notes (trilium)" }
+  ]
 }

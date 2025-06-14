@@ -28,39 +28,33 @@ export default function HowTo() {
           <div className="text-[16px] font-semibold">For adding a pattern download (download latest file matching the pattern)</div>
           <div className="text-[14px]">
             <pre>
-              {`
-              {
+              {`              {
                 "url": "https://download.kiwix.org/zim/stack_exchange/",
                 "dest": "../../data/wiki/zim",
                 "pattern": "(stackoverflow\\.com_en_all)",
                 "type": "pattern",
                 "latest": true
-              },
-              `}
+              }`}
             </pre>
           </div>
           <div className="text-[16px] font-semibold">For adding a specific file download</div>
           <div className="text-[14px]">
             <pre>
-              {`
-              {
+              {`              {
                 "url": "https://releases.ubuntu.com/24.04/ubuntu-24.04.2-live-server-amd64.iso",
                 "dest": "../../data/files/os/ubuntu-releases",
                 "type": "direct"
-              },
-              `}
+              }`}
             </pre>
           </div>
           <div className="text-[16px] font-semibold">For adding a docker image download</div>
           <div className="text-[14px]">
             <pre>
-              {`
-              {
+              {`              {
                 "image": "nginx",
                 "type": "docker",
                 "namespace": "library"
-              },
-              `}
+              }`}
             </pre>
           </div>
         </div>

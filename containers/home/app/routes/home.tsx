@@ -4,6 +4,7 @@ import type { Route } from "./+types/home";
 import { useLoaderData } from "react-router";
 import appConfig from "~/config/config.json";
 
+
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Homelab Main Page" },
@@ -11,24 +12,14 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-const hosts = [
-  { address: 'reg.root', name: 'Registry' },
-  { address: 'mirror.root', name: 'APT Mirror' },
-  { address: 'files.root', name: 'Files' },
-  { address: 'git.root', name: 'Git (gogs)' },
-  { address: 'wiki.root', name: 'Wiki (kiwix)' },
-  { address: 'notes.root', name: 'Notes (trilium)' }
-];
-
-const getPages = (config: { mirror: { disabled: boolean }, dns: { disabled: boolean, ip: string } }): { url: string, disabled?: boolean, name: string, description: string }[] => [
-  { url: `http://${hosts[0].address}`, name: hosts[0].name, description: 'Web UI for Docker Registry' },
-  { url: `http://${hosts[1].address}`, disabled: config.mirror.disabled, name: config.mirror.disabled ? `${hosts[1].name} (disabled)` : hosts[1].name, description: 'APT Mirror for Ubuntu' },
-  { url: `http://${hosts[2].address}`, name: hosts[2].name, description: 'Downloads defined in your downloads.json' },
-  { url: `http://${hosts[3].address}`, name: hosts[3].name, description: 'Git server for your projects' },
-  { url: `http://${hosts[4].address}`, name: hosts[4].name, description: 'Wiki server' },
-  { url: `http://${hosts[5].address}`, name: hosts[5].name, description: 'Notes (trilium)' },
-  { url: `http://${config.dns.ip}`, disabled: config.dns.disabled, name: config.dns.disabled ? `DNS (disabled)` : 'DNS', description: config.dns.disabled ? 'DNS server is not running. You need to configures following hosts on your router manually: ' + hosts.map((host) => host.address).join(', ') : 'DNS server is running on this IP. Please add this IP as a settings for DNS server on your router.' },
-];
+const getPages = (config: { mirror: { disabled: boolean; }; dns: { disabled: boolean; ip: string; } }): { url: string, disabled?: boolean, name: string, description: string }[] => {
+  return appConfig.hosts.map((host) => ({
+    url: `http://${host.address}`,
+    name: host.name,
+    description: host.description,
+    disabled: (host.id === "mirror" && config.mirror.disabled) || (host.id === "dns" && config.dns.disabled)
+  }));
+};
 
 export async function loader() {
   const config = await fetch(`${appConfig.url}/config.json`);
@@ -51,12 +42,12 @@ export default function Home() {
       <Title title="Services running in this Homelab" />
       <div className="flex flex-row items-center gap-[32px] flex-wrap">
         {getPages(config).map((page) => (
-          <div key={page.url} className={classNames("h-[120px] w-[calc(25%-24px)] bg-gray-100 rounded-md flex flex-col gap-[12px] p-[12px] shadow-sm", {
+          <div key={page.url} className={classNames("h-[120px] w-[calc(25%-24px)] bg-gray-100 border border-gray-200 shadow-md rounded-md flex flex-col gap-[12px] p-[12px]", {
             "opacity-70": page.disabled,
           })}>
             <a onClick={(e) => handleClick(e, page)} href={page.url} target="_blank" rel="noopener noreferrer" className={classNames("block text-[16px] text-blue-500 font-semibold", {
               "text-gray-500": page.disabled,
-            })}>{page.name}</a>
+            })}>{`${page.name} (${page.url})`}</a>
             <div className="text-[12px] text-gray-500">
               {page.description}
             </div>
