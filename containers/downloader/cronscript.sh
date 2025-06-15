@@ -64,7 +64,7 @@ mirror_docker_image() {
     local image="$1"
     local namespace="$2"
     local registry_url="registry:5000"
-    local architectures=("amd64" "arm64" "armv7")
+    local architectures=("amd64" "arm64" "arm/v7")
     local alt_registries=(
         "mirror.gcr.io/library/"
         "quay.io/library/"
@@ -118,7 +118,7 @@ mirror_docker_image() {
                 echo "pushed $desttagname"
                 
                 docker rmi $tagname $desttagname &> /dev/null
-                sleep 120
+                sleep 10
             done
             ((tag_count++))
         fi
