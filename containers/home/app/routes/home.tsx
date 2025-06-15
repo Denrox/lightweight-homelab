@@ -3,6 +3,7 @@ import classNames from "classnames";
 import type { Route } from "./+types/home";
 import { useLoaderData } from "react-router";
 import appConfig from "~/config/config.json";
+import PageLayoutFull from "~/components/shared/layout/page-layout-full";
 
 
 export function meta({}: Route.MetaArgs) {
@@ -38,7 +39,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col justify-center gap-[32px]">
+    <PageLayoutFull>
       <Title title="Services running in this Homelab" />
       <div className="flex flex-row items-center gap-[32px] flex-wrap">
         {getPages(config).map((page) => (
@@ -54,6 +55,6 @@ export default function Home() {
           </div>
         ))}
       </div>
-    </div>
+    </PageLayoutFull>
   );
 }

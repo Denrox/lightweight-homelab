@@ -6,6 +6,7 @@ import Title from "~/components/shared/title/title";
 import { useEffect, useState, useMemo } from "react";
 import classNames from "classnames";
 import ContentBlock from "~/components/shared/content-block/content-block";
+import PageLayoutFull from "~/components/shared/layout/page-layout-full";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -48,7 +49,7 @@ export default function Downloader() {
   }, [selectedLog, logs]);
 
   return (
-    <div className="flex flex-col justify-center h-full gap-[32px]">
+    <PageLayoutFull>
       <Title title="Downloader Logs" />
       <div className="flex flex-row justify-around align-center flex-wrap gap-[12px]">
         {sortedLogs.map((log) => (
@@ -63,6 +64,6 @@ export default function Downloader() {
       <ContentBlock className="flex-1">
         <pre className="whitespace-pre-wrap text-[14px]">{selectedLogContent}</pre>
       </ContentBlock>
-    </div>
+    </PageLayoutFull>
   );
 }
