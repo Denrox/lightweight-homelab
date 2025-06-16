@@ -63,9 +63,17 @@ export default function HowTo() {
       {activeSection === "ubuntu-apt-mirror" && (
         <ContentBlock>
           <div className="flex flex-col gap-[12px]">
-            <div className="text-[16px] font-semibold">Add the following to your /etc/apt/sources.list</div>
-            <div className="text-[14px]">deb http://mirror.root/ubuntu/ jammy main restricted universe multiverse</div>
-            <div className="text-[14px]">deb http://mirror.root/ubuntu/ jammy-updates main restricted universe multiverse</div>
+            <div className="text-[16px] font-semibold">Add the following to your /etc/apt/sources.list.d/ubuntu.sources</div>
+            <div className="text-[14px]">Types: deb</div>
+            <div className="text-[14px]">URIs: http://mirror.root/ubuntu/</div>
+            <div className="text-[14px]">Suites: noble noble-updates noble-backports</div>
+            <div className="text-[14px]">Components: main restricted universe multiverse</div>
+            <div className="text-[14px]">Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg</div>
+            <div className="text-[14px]">Types: deb</div>
+            <div className="text-[14px]">URIs: http://mirror.root/security/ubuntu/</div>
+            <div className="text-[14px]">Suites: noble-security</div>
+            <div className="text-[14px]">Components: main restricted universe multiverse</div>
+            <div className="text-[14px]">Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg</div>
           </div>
         </ContentBlock>
       )}
