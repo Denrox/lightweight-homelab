@@ -19,11 +19,17 @@ echo $$ > "$LOCK_FILE"
 # Clean up lock file on exit
 trap 'rm -f "$LOCK_FILE"' EXIT
 
+# Save original directory
+ORIGINAL_DIR=$(pwd)
+
 LOG_DATE=$(date +%Y-%m-%d)
 LOG_FILE="/logs/${LOG_DATE}.log"
 
 cd /logs || exit
 ls -t | tail -n +11 | xargs -r rm
+
+# Return to original directory
+cd "$ORIGINAL_DIR" || exit
 
 exec 1> >(tee -a "${LOG_FILE}")
 exec 2>&1
