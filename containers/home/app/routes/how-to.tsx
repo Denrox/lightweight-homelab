@@ -30,6 +30,11 @@ const sections = [
     linkName: "DNS Server",
     title: "How To Use DNS Server",
   },
+  {
+    id: "data-structure",
+    linkName: "Data Structure",
+    title: "Data Folder Structure",
+  },
 ]
 
 export function meta({}: Route.MetaArgs) {
@@ -146,6 +151,54 @@ export default function HowTo() {
                 </div>
               </>
             )}
+          </div>
+        </ContentBlock>
+      )}
+      {activeSection === "data-structure" && (
+        <ContentBlock>
+          <div className="flex flex-col gap-[12px]">
+            <div className="text-[16px] font-semibold">Data Folder Structure</div>
+            <div className="text-[14px]">
+              The data folder contains all the configuration files and downloaded content. Here's the structure:
+            </div>
+            <pre className="text-[14px] bg-gray-100 p-4 rounded">
+{`data/
+├── volumes/                      # Docker volumes
+│   ├── downloader/
+│   │   ├── config/
+│   │   │   ├── config.json       # Main configuration file (contains configurations from startup.sh)
+│   │   │   └── downloads.json    # Downloads list configuration
+│   │   ├── data/
+│   │   │   ├── files/
+│   │   │   │   └── os/
+│   │   │   │       └── ubuntu-releases/     # Ubuntu ISO files
+│   │   │   ├── wiki/
+│   │   │   │   └── zim/                    # Wiki ZIM files
+│   │   │   └── packages/                   # Downloaded packages
+│   │   └── logs/                 # Downloader logs by date
+│   ├── dns/
+│   │   └── config/
+│   │       └── Corefile          # DNS server configuration - your local network domains
+│   ├── nginx/
+│   │   └── conf/               # Nginx server configurations
+│   │       └── sites.conf      # Homenet hosts configuration
+│   ├── registry/
+│   │   └── registry/               # Docker registry storage
+│   │       └── config.yaml         # Docker registry configuration
+│   │       └── registry/               # Docker images storage
+│   └── trilium/
+│       └── data/               # Trilium notes storage
+│           ├── document.db     # Trilium database
+│           └── document.db-shm # Trilium database shared memory`}
+            </pre>
+            <div className="text-[16px] font-semibold mt-4">Configuration Files</div>
+            <div className="text-[14px]">
+              <ul className="list-disc list-inside pl-[16px]">
+                <li><span className="font-semibold">config.json:</span> Main configuration file for the homelab services</li>
+                <li><span className="font-semibold">downloads.json:</span> Configuration for automated downloads</li>
+                <li><span className="font-semibold">Corefile:</span> DNS server configuration</li>
+              </ul>
+            </div>
           </div>
         </ContentBlock>
       )}
