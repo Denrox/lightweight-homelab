@@ -111,7 +111,7 @@ mirror_docker_image() {
                     fi
                 fi
                 
-                desttagname="$registry_url/$image:$line-$arch"
+                desttagname="$registry_url/$image:$line-${arch//\//-}"
                 docker tag $tagname $desttagname
                 
                 docker push $desttagname &> /dev/null
