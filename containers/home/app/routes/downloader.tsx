@@ -51,16 +51,18 @@ export default function Downloader() {
   return (
     <PageLayoutFull>
       <Title title="Downloader Logs" />
-      <div className="flex flex-row justify-around align-center flex-wrap gap-[12px]">
-        {sortedLogs.map((log) => (
-          <div className={classNames("text-[16px] h-[40px] flex items-center justify-center font-semibold px-[12px] rounded-md shadow-sm hover:bg-gray-200 cursor-pointer", {
-            "bg-blue-200": selectedLog === log.name,
-            "bg-gray-100": selectedLog !== log.name
-          })} onClick={() => {
-            setSelectedLog(log.name);
-          }}>{log.name}</div>
-        ))}
-      </div>
+      {sortedLogs.length > 0 && (
+        <div className="flex flex-row justify-around align-center flex-wrap gap-[12px]">
+          {sortedLogs.map((log) => (
+            <div className={classNames("text-[16px] h-[40px] flex items-center justify-center font-semibold px-[12px] rounded-md shadow-sm hover:bg-gray-200 cursor-pointer", {
+              "bg-blue-200": selectedLog === log.name,
+              "bg-gray-100": selectedLog !== log.name
+            })} onClick={() => {
+              setSelectedLog(log.name);
+            }}>{log.name}</div>
+          ))}
+        </div>
+      )}
       <ContentBlock className="flex-1">
         <pre className="whitespace-pre-wrap text-[14px]">{selectedLogContent}</pre>
       </ContentBlock>
