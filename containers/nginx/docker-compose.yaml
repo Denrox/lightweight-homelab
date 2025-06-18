@@ -10,12 +10,6 @@ services:
       - ../../data/volumes/downloader/data/packages:/var/www/apt-mirror:ro
       - ../../data/volumes/nginx/logs:/var/log/nginx:rw
     restart: unless-stopped
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "2m"
-        max-file: "3"
-        tag: "nginx"
     networks:
       - frontend
 
