@@ -5,7 +5,7 @@ export default [
     "components/shared/layout/app-layout.tsx",
     [
       index("routes/home.tsx"),
-      route("downloader", "routes/downloader.tsx"),
+      route("logs/:log", "routes/logs.tsx"),
       route("how-to", "routes/how-to.tsx")
     ]
   ),

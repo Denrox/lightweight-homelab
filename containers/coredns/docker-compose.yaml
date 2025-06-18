@@ -8,3 +8,15 @@ services:
     ports:
       - "8053:8053/udp"
     command: -conf /root/Corefile
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "2m"
+        max-file: "3"
+        tag: "coredns"
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    external: true

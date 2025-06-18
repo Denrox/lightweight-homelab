@@ -6,7 +6,8 @@ services:
     volumes:
       - ./app:/app
       - ./public/config.json:/application/build/client/config.json
-      - ../../data/volumes/downloader/logs:/downloader/logs
+      - ../../data/volumes/downloader/logs:/logs/downloader
+      - ../../data/volumes/nginx/logs:/logs/nginx
     environment:
       - NODE_ENV=production
       - PORT=3000
