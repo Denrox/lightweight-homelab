@@ -34,7 +34,7 @@ export async function loader({ params }: Route.LoaderArgs) {
     logs = await fs.readdir(logsDir);
   }
 
-  const logsContent = await Promise.all(logs.filter((log) => log.endsWith(".log")).map(async (log) => {
+  const logsContent = await Promise.all(logs.filter((log) => log.endsWith(".log") || log.match(/\.log\.\d+$/)).map(async (log) => {
     const logContent = await fs.readFile(`${logsDir}/${log}`, "utf-8");
     return {
       name: log,
