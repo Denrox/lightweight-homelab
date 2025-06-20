@@ -5,7 +5,7 @@ set -e
 mkdir -p /var/lib/logrotate
 
 # Set up logrotate cron job to run daily at midnight
-echo "0 0 * * * /usr/sbin/logrotate /etc/logrotate.conf" | crontab -
+echo "0 * * * * /usr/sbin/logrotate /etc/logrotate.conf" | crontab -
 
 # Start cron daemon in background
 crond
