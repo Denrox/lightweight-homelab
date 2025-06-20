@@ -1,6 +1,6 @@
 services:
   nginx:
-    image: nginx:1.28.0-perl
+    image: nginx:1.28.0
     container_name: nginx
     ports:
       - "80:80"

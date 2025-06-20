@@ -108,10 +108,11 @@ else
     exit 1;
 fi
 
-NGINX_IMAGE="images/nginx-1.28.0-perl-${ARCH_TAG}.tar";
+NGINX_IMAGE="images/nginx-1.28.0-${ARCH_TAG}.tar";
 if [ -f "${NGINX_IMAGE}" ]; then
     echo "Loading nginx image from ${NGINX_IMAGE}...";
     docker load --input "${NGINX_IMAGE}";
+    docker tag nginx:1.28.0-${ARCH_TAG} nginx:1.28.0;
 else
     echo "Error: nginx image file not found at ${NGINX_IMAGE}";
     exit 1;

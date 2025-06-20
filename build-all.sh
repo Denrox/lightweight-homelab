@@ -41,18 +41,6 @@ echo "Pulling registry docker-registry-browser:1.8.3 for armv7..."
 docker pull --platform linux/arm/v7 klausmeyer/docker-registry-browser:1.8.3
 docker save klausmeyer/docker-registry-browser:1.8.3 > images/docker-registry-browser-1.8.3-armv7.tar
 
-echo "Pulling nginx:1.28.0-perl for amd64..."
-docker pull --platform linux/amd64 nginx:1.28.0-perl
-docker save nginx:1.28.0-perl > images/nginx-1.28.0-perl-amd64.tar
-
-echo "Pulling nginx:1.28.0-perl for arm64..."
-docker pull --platform linux/arm64 nginx:1.28.0-perl
-docker save nginx:1.28.0-perl > images/nginx-1.28.0-perl-arm64.tar
-
-echo "Pulling nginx:1.28.0-perl for armv7..."
-docker pull --platform linux/arm/v7 nginx:1.28.0-perl
-docker save nginx:1.28.0-perl > images/nginx-1.28.0-perl-armv7.tar
-
 echo "Pulling gogs:0.13 for amd64..."
 docker pull --platform linux/amd64 gogs/gogs:0.13-amd64
 docker save gogs/gogs:0.13-amd64 > images/gogs-0.13-amd64.tar
