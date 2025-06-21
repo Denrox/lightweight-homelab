@@ -1,0 +1,2 @@
+# Run logrotate every minute for nginx logs
+* * * * * /usr/sbin/logrotate /etc/logrotate.d/nginx 
