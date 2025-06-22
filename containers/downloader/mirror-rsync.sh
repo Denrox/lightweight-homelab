@@ -114,7 +114,7 @@ do
 		rsync --copy-links --files-from="$tmpDirectory/$filename" --no-motd --delete-during --archive --recursive --human-readable $masterSource::$name "$localPackageStore/" 2>&1;
 		exitCode=$?;
 		if [[ $exitCode -gt 0 ]]; then
-			waitTime=$((attempt*300)); #increasing wait time - 5, 10 and 15 minutes between attempts
+			waitTime=$((attempt*900)); #increasing wait time - 15, 30 and 45 minutes between attempts
 			echo "$(date +%T) rsync attempt $attempt failed with exit code $exitCode, waiting $waitTime seconds to retry" 1>&2;
 			sleep $waitTime;
 			let attempt+=1;
