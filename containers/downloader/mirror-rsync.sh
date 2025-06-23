@@ -134,7 +134,13 @@ do
 	echo "$(date +%T) Deleting obsolete packages";
 
 	#Build a list of files that have been synced and delete any that are not in the list
-	find "$localPackageStore/pool/" -type f | { grep -Fvf "$tmpDirectory/$filename" || true; } | xargs --no-run-if-empty -I {} rm -v {}; # '|| true' used here to prevent grep causing pipefail if there are no packages to delete - grep normally returns 1 if no files are found
+	if [[ -d "$localPackageStore/pool/" ]]; then
+		echo "$(date +%T) Checking for obsolete packages in $localPackageStore/pool/";
+		find "$localPackageStore/pool/" -type f | { grep -Fvf "$tmpDirectory/$filename" || true; } | xargs --no-run-if-empty -I {} rm -v {}; # '|| true' used here to prevent grep causing pipefail if there are no packages to delete - grep normally returns 1 if no files are found
+		echo "$(date +%T) Obsolete package cleanup completed";
+	else
+		echo "$(date +%T) Pool directory $localPackageStore/pool/ does not exist, skipping obsolete package cleanup";
+	fi
 
 	echo "$(date +%T) Completed $masterSource";
 

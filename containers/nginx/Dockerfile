@@ -13,9 +13,6 @@ RUN apk update && \
 # Copy logrotate configuration
 COPY logrotate.conf /etc/logrotate.d/nginx
 
-# Copy crontab file
-COPY crontab /tmp/crontab
-
 # Set correct permissions for logrotate configuration (root:root, 644)
 RUN chown root:root /etc/logrotate.d/nginx && \
     chmod 644 /etc/logrotate.d/nginx
