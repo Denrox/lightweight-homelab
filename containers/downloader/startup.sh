@@ -17,7 +17,21 @@ case ${ARCH} in
         ;;
 esac
 
-DOWNLOAD_MIRROR=${DOWNLOAD_MIRROR:-}
+# Get DOWNLOAD_MIRROR from command line argument
+if [ $# -gt 0 ]; then
+    # Parse the argument in format DOWNLOAD_MIRROR=true or DOWNLOAD_MIRROR=false
+    for arg in "$@"; do
+        if [[ $arg == DOWNLOAD_MIRROR=* ]]; then
+            DOWNLOAD_MIRROR=${arg#DOWNLOAD_MIRROR=}
+            break
+        fi
+    done
+fi
+
+# Default to false if not provided
+DOWNLOAD_MIRROR=${DOWNLOAD_MIRROR:-false}
+
+echo "DOWNLOAD_MIRROR set to: ${DOWNLOAD_MIRROR}"
 
 DOWNLOADER_IMAGE="../../images/downloader-${ARCH_TAG}.tar"
 if [ -f "${DOWNLOADER_IMAGE}" ]; then
