@@ -7,6 +7,56 @@ sourceFolder='./mirror-rsync.d';
 baseDirectory="/usr/local/data/packages";
 tmpDirectory="/usr/local/data/mirror-tmp";
 
+# Function to run rsync with better error handling
+run_rsync_with_retry() {
+    local source="$1"
+    local dest="$2"
+    local files_list="$3"
+    local max_attempts=3
+    local attempt=1
+    local exit_code=1
+    
+    while [[ $exit_code -gt 0 ]] && [[ $attempt -le $max_attempts ]]; do
+        echo "$(date +%T) rsync attempt $attempt of $max_attempts";
+        SECONDS=0;
+        
+        # Run rsync with options to handle verification errors
+        rsync --copy-links \
+              --files-from="$files_list" \
+              --no-motd \
+              --delete-during \
+              --archive \
+              --recursive \
+              --human-readable \
+              --partial \
+              --partial-dir=.rsync-partial \
+              --timeout=300 \
+              --contimeout=60 \
+              --ignore-errors \
+              --exclude='*.tmp' \
+              --exclude='*.part' \
+              "$source" "$dest" 2>&1;
+        
+        exit_code=$?;
+        
+        if [[ $exit_code -gt 0 ]]; then
+            if [[ $attempt -lt $max_attempts ]]; then
+                local wait_time=$((attempt*900)); # 15, 30, 45 minutes
+                echo "$(date +%T) rsync attempt $attempt failed with exit code $exit_code, waiting $wait_time seconds to retry" 1>&2;
+                sleep $wait_time;
+            else
+                echo "$(date +%T) rsync failed all $max_attempts attempts" 1>&2;
+            fi
+        else
+            echo "$(date +%T) rsync completed successfully in $SECONDS seconds";
+        fi
+        
+        ((attempt++));
+    done
+    
+    return $exit_code;
+}
+
 #Basic checks
 if [[ ! -d "$sourceFolder" ]]; then
 		echo "Source folder $sourceFolder does not exist!"
@@ -103,25 +153,15 @@ do
 
 	echo "$(date +%T) Running rsync";
 
-	#rsync may error out due to excessive load on the source server, so try up to 3 times
-	set +e;
-	attempt=1;
-	exitCode=1;
+	# Use the improved rsync function with better error handling
+	run_rsync_with_retry "$masterSource::$name" "$localPackageStore/" "$tmpDirectory/$filename";
+	exitCode=$?;
 
-	while [[ $exitCode -gt 0 ]] && [[ $attempt -lt 4 ]];
-	do
-		SECONDS=0;
-		rsync --copy-links --files-from="$tmpDirectory/$filename" --no-motd --delete-during --archive --recursive --human-readable $masterSource::$name "$localPackageStore/" 2>&1;
-		exitCode=$?;
-		if [[ $exitCode -gt 0 ]]; then
-			waitTime=$((attempt*900)); #increasing wait time - 15, 30 and 45 minutes between attempts
-			echo "$(date +%T) rsync attempt $attempt failed with exit code $exitCode, waiting $waitTime seconds to retry" 1>&2;
-			sleep $waitTime;
-			let attempt+=1;
-		fi
-	done
-
-	set -e;
+	# Clean up any partial files
+	if [[ -d "$localPackageStore/.rsync-partial" ]]; then
+		echo "$(date +%T) Cleaning up partial files";
+		rm -rf "$localPackageStore/.rsync-partial";
+	fi
 
 	#Exiting here will stop the lastSuccess file being created, and will stop APT02 running its own sync
 	if [[ $exitCode -gt 0 ]]; then
