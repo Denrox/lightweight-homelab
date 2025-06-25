@@ -4,7 +4,7 @@
 LOCK_FILE="/tmp/cronscript.lock"
 
 if [ -e "$LOCK_FILE" ]; then
-    if [ $(( $(date +%s) - $(stat -c %Y "$LOCK_FILE") )) -gt 57600 ]; then
+    if [ $(( $(date +%s) - $(stat -c %Y "$LOCK_FILE") )) -gt 86400 ]; then
         echo "Lock file is older than 24 hours. Removing stale lock and continuing."
         rm -f "$LOCK_FILE"
     elif kill -0 $(cat "$LOCK_FILE") 2>/dev/null; then
