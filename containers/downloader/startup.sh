@@ -43,10 +43,11 @@ else
     exit 1;
 fi
 
+echo "{\"mirrors\": ${DOWNLOAD_MIRROR}}" > ../../data/volumes/downloader/config/config.json;
+
 if [ "$(docker ps -q -f name=downloader)" ]; then
     echo "Downloader service is already running...";
 else
     echo "Starting downloader service...";
-    export DOWNLOAD_MIRROR
     docker compose up -d;
 fi

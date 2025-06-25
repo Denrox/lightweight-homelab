@@ -204,9 +204,6 @@ if [ "$STARTUP_DNS" = true ]; then
     docker compose up -d;
 fi
 
-cd ../..;
-echo "{\"mirrors\": ${DOWNLOAD_MIRROR}}" > data/volumes/downloader/config/config.json;
-
 cat > containers/home/public/config.json << EOF
 {
     "dns": {
