@@ -14,6 +14,8 @@ fi
 # Clean up any existing Docker socket
 rm -f /var/run/docker.sock
 
+sleep 10
+
 # Start the Docker daemon
 dockerd --pidfile /var/run/docker.pid &
 
