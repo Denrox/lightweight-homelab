@@ -204,6 +204,8 @@ if [ "$STARTUP_DNS" = true ]; then
     docker compose up -d;
 fi
 
+cd ../..
+
 cat > containers/home/public/config.json << EOF
 {
     "dns": {
