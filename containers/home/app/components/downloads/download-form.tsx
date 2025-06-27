@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { Download } from "~/services/data/downloads";
+import type { Download } from "~/types/downloads";
 import FormField from "~/components/shared/form/form-field";
 import FormInput from "~/components/shared/form/form-input";
 import FormSelect from "~/components/shared/form/form-select";
@@ -11,9 +11,10 @@ interface DownloadFormProps {
   type: Download['type'];
   onSave: (download: Download) => void;
   onCancel: () => void;
+  isSubmitting?: boolean;
 }
 
-export default function DownloadForm({ download, type, onSave, onCancel }: DownloadFormProps) {
+export default function DownloadForm({ download, type, onSave, onCancel, isSubmitting = false }: DownloadFormProps) {
   const [formData, setFormData] = useState<Download>({
     type,
     url: '',
@@ -26,7 +27,12 @@ export default function DownloadForm({ download, type, onSave, onCancel }: Downl
 
   useEffect(() => {
     if (download) {
-      setFormData(download);
+      // Strip "../../data/" prefix for display when editing
+      const displayData = { ...download };
+      if (displayData.dest && displayData.dest.startsWith('../../data/')) {
+        displayData.dest = displayData.dest.replace(/^\.\.\/\.\.\/data\//, '');
+      }
+      setFormData(displayData);
     }
   }, [download]);
 
@@ -69,7 +75,33 @@ export default function DownloadForm({ download, type, onSave, onCancel }: Downl
       return;
     }
 
+    // Validate and process destination path
+    if (formData.dest) {
+      const dest = formData.dest.trim();
+      
+      // Check for invalid path patterns
+      if (dest.includes('../') || dest.includes('./') || dest.startsWith('/')) {
+        alert('Invalid destination path. Please use relative paths like "files/os/ubuntu-releases" or "wiki/zim"');
+        return;
+      }
+      
+      // Auto-prepend "../../data/" if not already present
+      if (!dest.startsWith('../../data/')) {
+        formData.dest = `../../data/${dest}`;
+      }
+    }
+
     onSave(formData);
+  };
+
+  const handleDestChange = (value: string) => {
+    // Remove any "../" or "./" patterns as user types
+    let cleanValue = value.replace(/\.\.\//g, '').replace(/\.\//g, '');
+    
+    // Remove leading slashes
+    cleanValue = cleanValue.replace(/^\/+/, '');
+    
+    setFormData({ ...formData, dest: cleanValue });
   };
 
   const renderDirectFields = () => (
@@ -85,9 +117,12 @@ export default function DownloadForm({ download, type, onSave, onCancel }: Downl
       <FormField label="Destination Path" required>
         <FormInput
           value={formData.dest || ''}
-          onChange={(value) => setFormData({ ...formData, dest: value })}
-          placeholder="../../data/files/os/ubuntu-releases"
+          onChange={handleDestChange}
+          placeholder="files/os/ubuntu-releases"
         />
+        <div className="text-[12px] text-gray-500 mt-[4px]">
+          Path will be automatically prefixed with "../../data/"
+        </div>
       </FormField>
     </>
   );
@@ -105,9 +140,12 @@ export default function DownloadForm({ download, type, onSave, onCancel }: Downl
       <FormField label="Destination Path" required>
         <FormInput
           value={formData.dest || ''}
-          onChange={(value) => setFormData({ ...formData, dest: value })}
-          placeholder="../../data/wiki/zim"
+          onChange={handleDestChange}
+          placeholder="wiki/zim"
         />
+        <div className="text-[12px] text-gray-500 mt-[4px]">
+          Path will be automatically prefixed with "../../data/"
+        </div>
       </FormField>
       
       <FormField label="Pattern" required>
@@ -173,10 +211,10 @@ export default function DownloadForm({ download, type, onSave, onCancel }: Downl
       {renderFields()}
       
       <div className="flex gap-[12px] justify-end">
-        <FormButton type="secondary" onClick={onCancel}>
+        <FormButton type="secondary" onClick={onCancel} disabled={isSubmitting}>
           Cancel
         </FormButton>
-        <FormButton type="primary" onClick={handleSubmitClick}>
+        <FormButton type="primary" onClick={handleSubmitClick} disabled={isSubmitting}>
           {download ? 'Update' : 'Add'}
         </FormButton>
       </div>

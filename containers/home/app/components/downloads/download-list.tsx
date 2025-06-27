@@ -1,4 +1,4 @@
-import type { Download } from "~/services/data/downloads";
+import type { Download } from "~/types/downloads";
 import FormButton from "~/components/shared/form/form-button";
 
 interface DownloadListProps {
@@ -8,6 +8,12 @@ interface DownloadListProps {
 }
 
 export default function DownloadList({ downloads, onEdit, onDelete }: DownloadListProps) {
+  const formatDestinationPath = (path: string | undefined): string => {
+    if (!path) return '';
+    // Remove "../../data/" prefix if present for display
+    return path.replace(/^\.\.\/\.\.\/data\//, '');
+  };
+
   if (downloads.length === 0) {
     return (
       <div className="text-center text-gray-500 py-[48px]">
@@ -24,7 +30,7 @@ export default function DownloadList({ downloads, onEdit, onDelete }: DownloadLi
             <div className="text-[14px] font-semibold">Direct Download</div>
             <div className="text-[12px] text-gray-600">
               <div><strong>URL:</strong> {download.url}</div>
-              <div><strong>Destination:</strong> {download.dest}</div>
+              <div><strong>Destination:</strong> {formatDestinationPath(download.dest)}</div>
             </div>
           </div>
         );
@@ -35,7 +41,7 @@ export default function DownloadList({ downloads, onEdit, onDelete }: DownloadLi
             <div className="text-[14px] font-semibold">Pattern Download</div>
             <div className="text-[12px] text-gray-600">
               <div><strong>URL:</strong> {download.url}</div>
-              <div><strong>Destination:</strong> {download.dest}</div>
+              <div><strong>Destination:</strong> {formatDestinationPath(download.dest)}</div>
               <div><strong>Pattern:</strong> {download.pattern}</div>
               <div><strong>Latest Only:</strong> {download.latest ? 'Yes' : 'No'}</div>
             </div>
