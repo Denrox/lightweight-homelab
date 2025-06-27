@@ -5,6 +5,13 @@ import FormInput from "~/components/shared/form/form-input";
 import FormSelect from "~/components/shared/form/form-select";
 import FormCheckbox from "~/components/shared/form/form-checkbox";
 import FormButton from "~/components/shared/form/form-button";
+import { 
+  isValidPath, 
+  normalizePath, 
+  denormalizePath, 
+  cleanPath, 
+  getPathValidationError 
+} from "~/utils/path-validation";
 
 interface DownloadFormProps {
   download?: Download;
@@ -25,103 +32,161 @@ export default function DownloadForm({ download, type, onSave, onCancel, isSubmi
     namespace: 'library'
   });
 
+  const [errors, setErrors] = useState<{[key: string]: string}>({});
+
   useEffect(() => {
     if (download) {
       // Strip "../../data/" prefix for display when editing
       const displayData = { ...download };
-      if (displayData.dest && displayData.dest.startsWith('../../data/')) {
-        displayData.dest = displayData.dest.replace(/^\.\.\/\.\.\/data\//, '');
+      if (displayData.dest) {
+        displayData.dest = normalizePath(displayData.dest);
       }
       setFormData(displayData);
     }
   }, [download]);
 
+  const validateForm = (): boolean => {
+    const newErrors: {[key: string]: string} = {};
+
+    // Validate URL for direct and pattern downloads
+    if (type === 'direct' || type === 'pattern') {
+      if (!formData.url) {
+        newErrors.url = 'URL is required';
+      } else {
+        try {
+          new URL(formData.url);
+        } catch {
+          newErrors.url = 'Invalid URL format';
+        }
+      }
+
+      // Validate destination path
+      if (!formData.dest) {
+        newErrors.dest = 'Destination path is required';
+      } else {
+        const pathError = getPathValidationError(formData.dest);
+        if (pathError) {
+          newErrors.dest = pathError;
+        }
+      }
+    }
+
+    // Additional validation for pattern downloads
+    if (type === 'pattern') {
+      if (!formData.pattern) {
+        newErrors.pattern = 'Pattern is required';
+      } else {
+        try {
+          new RegExp(formData.pattern);
+        } catch {
+          newErrors.pattern = 'Invalid regex pattern';
+        }
+      }
+    }
+
+    // Validate docker downloads
+    if (type === 'docker') {
+      if (!formData.image) {
+        newErrors.image = 'Image name is required';
+      } else if (!/^[a-zA-Z0-9\/\-_]+$/.test(formData.image)) {
+        newErrors.image = 'Image name can only contain letters, numbers, hyphens, underscores, and forward slashes';
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate required fields based on type
-    if (type === 'direct' && (!formData.url || !formData.dest)) {
-      alert('URL and destination are required for direct downloads');
-      return;
-    }
-    
-    if (type === 'pattern' && (!formData.url || !formData.dest || !formData.pattern)) {
-      alert('URL, destination, and pattern are required for pattern downloads');
-      return;
-    }
-    
-    if (type === 'docker' && !formData.image) {
-      alert('Image name is required for docker downloads');
+    if (!validateForm()) {
       return;
     }
 
-    onSave(formData);
+    // Process the form data
+    const processedData = { ...formData };
+    
+    // Denormalize the destination path
+    if (processedData.dest) {
+      processedData.dest = denormalizePath(processedData.dest);
+    }
+
+    onSave(processedData);
   };
 
   const handleSubmitClick = () => {
-    // Validate required fields based on type
-    if (type === 'direct' && (!formData.url || !formData.dest)) {
-      alert('URL and destination are required for direct downloads');
-      return;
-    }
-    
-    if (type === 'pattern' && (!formData.url || !formData.dest || !formData.pattern)) {
-      alert('URL, destination, and pattern are required for pattern downloads');
-      return;
-    }
-    
-    if (type === 'docker' && !formData.image) {
-      alert('Image name is required for docker downloads');
+    if (!validateForm()) {
       return;
     }
 
-    // Validate and process destination path
-    if (formData.dest) {
-      const dest = formData.dest.trim();
-      
-      // Check for invalid path patterns
-      if (dest.includes('../') || dest.includes('./') || dest.startsWith('/')) {
-        alert('Invalid destination path. Please use relative paths like "files/os/ubuntu-releases" or "wiki/zim"');
-        return;
-      }
-      
-      // Auto-prepend "../../data/" if not already present
-      if (!dest.startsWith('../../data/')) {
-        formData.dest = `../../data/${dest}`;
-      }
+    // Process the form data
+    const processedData = { ...formData };
+    
+    // Denormalize the destination path
+    if (processedData.dest) {
+      processedData.dest = denormalizePath(processedData.dest);
     }
 
-    onSave(formData);
+    onSave(processedData);
   };
 
   const handleDestChange = (value: string) => {
-    // Remove any "../" or "./" patterns as user types
-    let cleanValue = value.replace(/\.\.\//g, '').replace(/\.\//g, '');
+    // Clean the path input
+    const cleanedValue = cleanPath(value);
+    setFormData({ ...formData, dest: cleanedValue });
     
-    // Remove leading slashes
-    cleanValue = cleanValue.replace(/^\/+/, '');
+    // Clear dest error if it exists
+    if (errors.dest) {
+      setErrors({ ...errors, dest: '' });
+    }
+  };
+
+  const handleUrlChange = (value: string) => {
+    setFormData({ ...formData, url: value });
     
-    setFormData({ ...formData, dest: cleanValue });
+    // Clear url error if it exists
+    if (errors.url) {
+      setErrors({ ...errors, url: '' });
+    }
+  };
+
+  const handlePatternChange = (value: string) => {
+    setFormData({ ...formData, pattern: value });
+    
+    // Clear pattern error if it exists
+    if (errors.pattern) {
+      setErrors({ ...errors, pattern: '' });
+    }
+  };
+
+  const handleImageChange = (value: string) => {
+    setFormData({ ...formData, image: value });
+    
+    // Clear image error if it exists
+    if (errors.image) {
+      setErrors({ ...errors, image: '' });
+    }
   };
 
   const renderDirectFields = () => (
     <>
-      <FormField label="URL" required>
+      <FormField label="URL" required error={errors.url}>
         <FormInput
           value={formData.url || ''}
-          onChange={(value) => setFormData({ ...formData, url: value })}
+          onChange={handleUrlChange}
           placeholder="https://example.com/file.iso"
         />
       </FormField>
       
-      <FormField label="Destination Path" required>
+      <FormField label="Destination Path" required error={errors.dest}>
         <FormInput
           value={formData.dest || ''}
           onChange={handleDestChange}
           placeholder="files/os/ubuntu-releases"
         />
         <div className="text-[12px] text-gray-500 mt-[4px]">
-          Path will be automatically prefixed with "../../data/"
+          Path will be automatically prefixed with "../../data/". Only letters, numbers, hyphens, underscores, and forward slashes are allowed. Trailing slashes are allowed for directories.
         </div>
       </FormField>
     </>
@@ -129,31 +194,34 @@ export default function DownloadForm({ download, type, onSave, onCancel, isSubmi
 
   const renderPatternFields = () => (
     <>
-      <FormField label="URL" required>
+      <FormField label="URL" required error={errors.url}>
         <FormInput
           value={formData.url || ''}
-          onChange={(value) => setFormData({ ...formData, url: value })}
+          onChange={handleUrlChange}
           placeholder="https://download.kiwix.org/zim/stack_exchange/"
         />
       </FormField>
       
-      <FormField label="Destination Path" required>
+      <FormField label="Destination Path" required error={errors.dest}>
         <FormInput
           value={formData.dest || ''}
           onChange={handleDestChange}
           placeholder="wiki/zim"
         />
         <div className="text-[12px] text-gray-500 mt-[4px]">
-          Path will be automatically prefixed with "../../data/"
+          Path will be automatically prefixed with "../../data/". Only letters, numbers, hyphens, underscores, and forward slashes are allowed. Trailing slashes are allowed for directories.
         </div>
       </FormField>
       
-      <FormField label="Pattern" required>
+      <FormField label="Pattern" required error={errors.pattern}>
         <FormInput
           value={formData.pattern || ''}
-          onChange={(value) => setFormData({ ...formData, pattern: value })}
+          onChange={handlePatternChange}
           placeholder="(stackoverflow\\.com_en_all)"
         />
+        <div className="text-[12px] text-gray-500 mt-[4px]">
+          Enter a valid regex pattern to match files
+        </div>
       </FormField>
       
       <FormField label="Latest Only">
@@ -168,10 +236,10 @@ export default function DownloadForm({ download, type, onSave, onCancel, isSubmi
 
   const renderDockerFields = () => (
     <>
-      <FormField label="Image Name" required>
+      <FormField label="Image Name" required error={errors.image}>
         <FormInput
           value={formData.image || ''}
-          onChange={(value) => setFormData({ ...formData, image: value })}
+          onChange={handleImageChange}
           placeholder="nginx"
         />
       </FormField>

@@ -90,7 +90,7 @@ export default function Downloads() {
   const [editingDownload, setEditingDownload] = useState<{ download: Download; index: number } | null>(null);
 
   useEffect(() => {
-    const filtered = downloads.filter(download => download.type === activeSection);
+    const filtered = downloads.filter((download: Download) => download.type === activeSection);
     setFilteredDownloads(filtered);
     // Reset edit state when switching tabs
     setShowForm(false);

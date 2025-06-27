@@ -1,7 +1,7 @@
 export interface Download {
+  type: 'direct' | 'pattern' | 'docker';
   url?: string;
   dest?: string;
-  type: 'direct' | 'pattern' | 'docker';
   pattern?: string;
   latest?: boolean;
   image?: string;
