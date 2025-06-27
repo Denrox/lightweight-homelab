@@ -10,6 +10,9 @@ export default function Header() {
         <Link to="/" className={classNames("text-[16px] hover:border-b-2 hover:border-blue-600 flex items-center justify-center h-full block px-[16px] min-w-[200px] hover:bg-blue-200 hover:text-blue-600 text-center font-semibold", {
           "border-b-2 border-blue-600 text-blue-600 bg-blue-200": location.pathname === "/"
         })}>Homelab Main Page</Link>
+        <Link to="/downloads" className={classNames("text-[16px] hover:border-b-2 hover:border-blue-600 flex items-center justify-center h-full block px-[16px] min-w-[200px] hover:bg-blue-200 hover:text-blue-600 text-center font-semibold", {
+          "border-b-2 border-blue-600 text-blue-600 bg-blue-200": location.pathname === "/downloads"
+        })}>Downloads</Link>
         <Link to="/logs/downloader" className={classNames("text-[16px] hover:border-b-2 hover:border-blue-600 flex items-center justify-center h-full block px-[16px] min-w-[200px] hover:bg-blue-200 hover:text-blue-600 text-center font-semibold", {
           "border-b-2 border-blue-600 text-blue-600 bg-blue-200": location.pathname.startsWith("/logs")
         })}>Logs</Link>
