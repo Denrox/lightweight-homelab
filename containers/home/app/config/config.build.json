@@ -2,6 +2,7 @@
   "url": "http://home.root",
   "downloaderLogsDir": "/logs/downloader",
   "nginxLogsDir": "/logs/nginx",
+  "downloadsConfigPath": "/data/downloads.json",
   "hosts": [
     { "id": "regUI", "address": "reg.root", "name": "Docker Registry UI", "description": "Web UI for Docker Registry" },
     { "id": "reg", "address": "reg.root:5000", "name": "Docker Registry", "description": "Docker Registry" },

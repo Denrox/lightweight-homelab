@@ -2,6 +2,10 @@
 
 sleep 10
 
+# Kill any existing containerd processes
+pkill -f containerd || true
+sleep 2
+
 # Kill any existing Docker daemon process
 if [ -f /var/run/docker.pid ]; then
     pid=$(cat /var/run/docker.pid)
@@ -12,8 +16,10 @@ if [ -f /var/run/docker.pid ]; then
     rm -f /var/run/docker.pid
 fi
 
-# Clean up any existing Docker socket
+# Clean up any existing Docker and containerd files
 rm -f /var/run/docker.sock
+rm -f /var/run/containerd/containerd.sock
+rm -rf /var/run/containerd/runc
 
 sleep 2
 

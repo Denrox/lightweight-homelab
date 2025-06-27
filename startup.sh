@@ -59,6 +59,35 @@ case ${ARCH} in
         ;;
 esac
 
+# Prompt for admin password for nginx basic auth
+NGINX_HTPASSWD_PATH="data/volumes/nginx/conf/.htpasswd"
+NGINX_HTPASSWD_DIR="data/volumes/nginx/conf"
+
+read -s -p "Enter admin password for home.root (nginx basic auth): " ADMIN_PASS1
+printf "\n"
+read -s -p "Confirm admin password: " ADMIN_PASS2
+printf "\n"
+if [ "$ADMIN_PASS1" != "$ADMIN_PASS2" ]; then
+    echo "Error: Passwords do not match. Exiting."
+    exit 1
+fi
+
+# Ensure the directory exists
+mkdir -p "$NGINX_HTPASSWD_DIR"
+
+# Generate .htpasswd using OpenSSL (bcrypt)
+# Format: username:$2y$cost$salt$hash
+generate_htpasswd() {
+    local username="$1"
+    local password="$2"
+    local salt=$(openssl rand -base64 16 | tr -d "=+/" | cut -c1-22)
+    local hash=$(openssl passwd -6 -salt "$salt" "$password")
+    echo "$username:$hash"
+}
+
+# Write the .htpasswd file (overwrite)
+generate_htpasswd "admin" "$ADMIN_PASS1" > "$NGINX_HTPASSWD_PATH"
+
 echo "Lightweight Homelab Setup"
 echo "========================"
 echo

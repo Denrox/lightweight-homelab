@@ -7,6 +7,7 @@ services:
       - "5000:5000"
     volumes:
       - ../../data/volumes/nginx/conf/sites.conf:/etc/nginx/conf.d/sites.conf:ro
+      - ../../data/volumes/nginx/conf/.htpasswd:/etc/nginx/conf/.htpasswd:ro
       - ../../data/volumes/downloader/data/files:/var/www/files:ro
       - ../../data/volumes/downloader/data/packages:/var/www/apt-mirror:ro
       - ../../data/volumes/nginx/logs:/var/log/nginx:rw
