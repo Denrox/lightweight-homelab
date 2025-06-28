@@ -21,14 +21,14 @@ export default function Header() {
     { to: "/how-to", label: "How To Use", isActive: location.pathname === "/how-to" }
   ];
 
-  const navLinkClasses = "text-[16px] hover:border-b-2 hover:border-blue-600 flex items-center justify-center h-full block px-[16px] min-w-[152px] hover:bg-blue-200 hover:text-blue-600 text-center font-semibold";
+  const navLinkClasses = "text-[16px] hover:border-b-2 hover:border-blue-600 flex h-full items-center justify-center block px-[16px] min-w-[152px] hover:bg-blue-200 hover:text-blue-600 text-center font-semibold";
   const activeLinkClasses = "border-b-2 border-blue-600 text-blue-600 bg-blue-200";
 
   return (
     <div className="flex size-full bg-gradient-to-r from-blue-400 to-blue-600 border-b border-gray-100 shadow-sm justify-center items-center h-[72px]">
       <div className="container gap-[2px] h-full mx-auto text-white flex flex-row items-center justify-center relative">
         {/* Desktop Navigation - Hidden on screens below 1024px */}
-        <div className="hidden lg:flex flex-row items-center justify-center">
+        <div className="hidden h-full lg:flex flex-row items-center justify-center">
           {navItems.map((item) => (
             <Link
               key={item.to}

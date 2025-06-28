@@ -1,5 +1,5 @@
 import { Link, useLoaderData, useParams } from "react-router";
-import type { Route } from "./+types/downloader";
+import type { Route } from "./+types/logs";
 import fs from "fs/promises";
 import appConfig from "~/config/config.json";
 import Title from "~/components/shared/title/title";
@@ -7,6 +7,7 @@ import { useEffect, useState, useMemo } from "react";
 import classNames from "classnames";
 import ContentBlock from "~/components/shared/content-block/content-block";
 import PageLayoutNav from "~/components/shared/layout/page-layout-nav";
+import NavLink from "~/components/shared/nav/nav-link";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -76,9 +77,13 @@ export default function Downloader() {
   return (
     <PageLayoutNav
       nav={sections.map((section) => (
-        <Link to={`/logs/${section.id}`} className={classNames("text-[16px] block leading-[48px] min-h-[48px] flex-0 bg-blue-200 border-white border-b-2 hover:border-blue-600 px-[16px] w-[200px] hover:text-blue-600 text-center font-semibold", {
-          "border-blue-600 border-b-2 text-blue-600": activeSection === section.id
-        })}>{section.linkName}</Link>
+        <NavLink
+          key={section.id}
+          to={`/logs/${section.id}`}
+          isActive={activeSection === section.id}
+        >
+          {section.linkName}
+        </NavLink>
       ))}
     >
       <>

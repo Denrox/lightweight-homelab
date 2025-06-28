@@ -8,6 +8,7 @@ import type { Route } from "./+types/downloads";
 import type { Download } from "~/types/downloads";
 import DownloadForm from "~/components/downloads/download-form";
 import DownloadList from "~/components/downloads/download-list";
+import NavLink from "~/components/shared/nav/nav-link";
 import fs from "fs/promises";
 import appConfig from "~/config/config.json";
 
@@ -202,23 +203,29 @@ export default function Downloads() {
   return (
     <PageLayoutNav
       nav={sections.map((section) => (
-        <Link 
+        <NavLink
           key={section.id}
-          to={`#${section.id}`} 
-          className={classNames(
-            "text-[16px] block leading-[48px] min-h-[48px] flex-0 bg-blue-200 border-white border-b-2 hover:border-blue-600 px-[16px] w-[200px] hover:text-blue-600 text-center font-semibold cursor-pointer", 
-            {
-              "border-blue-600 border-b-2 text-blue-600": activeSection === section.id
-            }
-          )}
+          to={`#${section.id}`}
+          isActive={activeSection === section.id}
           onClick={() => setActiveSection(section.id)}
         >
           {section.linkName}
-        </Link>
+        </NavLink>
       ))}
     >
       <>
-        <Title title={sections.find((section) => section.id === activeSection)?.title || ""} />
+        <Title 
+          title={sections.find((section) => section.id === activeSection)?.title || ""} 
+          action={
+            <button
+              onClick={handleAddDownload}
+              className="h-[40px] w-[40px] bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer flex items-center justify-center"
+              aria-label="Add Download"
+            >
+              +
+            </button>
+          }
+        />
         
         {showForm ? (
           <ContentBlock>
@@ -231,24 +238,13 @@ export default function Downloads() {
             />
           </ContentBlock>
         ) : (
-          <>
-            <div className="flex justify-end">
-              <button
-                onClick={handleAddDownload}
-                className="h-[40px] px-[16px] bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
-              >
-                Add Download
-              </button>
-            </div>
-            
-            <ContentBlock>
-              <DownloadList
-                downloads={filteredDownloads}
-                onEdit={handleEditDownload}
-                onDelete={handleDeleteDownload}
-              />
-            </ContentBlock>
-          </>
+          <ContentBlock>
+            <DownloadList
+              downloads={filteredDownloads}
+              onEdit={handleEditDownload}
+              onDelete={handleDeleteDownload}
+            />
+          </ContentBlock>
         )}
       </>
     </PageLayoutNav>
