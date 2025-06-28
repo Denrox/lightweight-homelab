@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Link, useLoaderData, useLocation } from "react-router";
 import classNames from "classnames";
 import appConfig from "~/config/config.json";
+import NavLink from "~/components/shared/nav/nav-link";
 
 export async function loader() {
   const config = await fetch(`${appConfig.url}/config.json`);
@@ -59,9 +60,14 @@ export default function HowTo() {
   return (
     <PageLayoutNav
       nav={sections.map((section) => (
-        <Link to={`#${section.id}`} className={classNames("text-[16px] block leading-[48px] min-h-[48px] flex-0 bg-blue-200 border-white border-b-2 hover:border-blue-600 px-[16px] w-[200px] hover:text-blue-600 text-center font-semibold", {
-          "border-blue-600 border-b-2 text-blue-600": activeSection === section.id
-        })}>{section.linkName}</Link>
+        <NavLink
+          key={section.id}
+          to={`#${section.id}`}
+          isActive={activeSection === section.id}
+          onClick={() => setActiveSection(section.id)}
+        >
+          {section.linkName}
+        </NavLink>
       ))}
     >
       <>

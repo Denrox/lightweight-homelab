@@ -66,9 +66,9 @@ export default function Home() {
   return (
     <PageLayoutFull>
       <Title title="Services running in this Homelab" />
-      <div className="flex flex-row items-center gap-[32px] flex-wrap">
+      <div className="flex flex-row items-center gap-[32px] flex-wrap px-[16px] lg:px-0">
         {pages.map((page) => (
-          <div key={page.url} className={classNames("h-[120px] w-[calc(25%-24px)] relative bg-gray-100 border border-gray-200 shadow-md rounded-md flex flex-col gap-[12px] p-[12px]", {
+          <div key={page.url} className={classNames("h-[120px] w-[calc(50%-18px)] lg:w-[calc(25%-24px)] relative bg-gray-100 border border-gray-200 shadow-md rounded-md flex flex-col gap-[12px] p-[12px]", {
             "opacity-70": page.disabled,
           })}>
             <a onClick={(e) => handleClick(e, page)} href={page.url} target="_blank" rel="noopener noreferrer" className={classNames("block text-[16px] w-[calc(100%-48px)] whitespace-nowrap overflow-hidden text-ellipsis text-blue-500 font-semibold", {
